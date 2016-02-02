@@ -1,0 +1,71 @@
+[user]
+	name = Srđan Svrdlan
+	email = srdjan.svrdlan@gmail.com
+[core]
+	autocrlf = true
+	excludesfile = C:\\Users\\s.svrdlan\\Documents\\gitignore_global.txt
+	preloadindex = true
+	fscache = true
+	pager = less
+[push]
+	default = simple
+[diff]
+	tool = diffmerge
+[difftool "diffmerge"]
+	cmd = 'C:/Program Files/SourceGear/Common/DiffMerge/sgdm.exe' \"$LOCAL\" \"$REMOTE\"
+[merge]
+	tool = diffmerge
+[mergetool "diffmerge"]
+	trustExitCode = true
+	cmd = 'C:/Program Files/SourceGear/Common/DiffMerge/sgdm.exe' -merge -result=\"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
+[color]
+	ui = auto
+[alias]
+	ru = remote update
+	f = fetch
+	mr = merge
+	co = checkout
+	com = checkout master
+	cod = checkout develop
+	fc = "!f() { git checkout feature/CORE-$1; }; f"
+	fm = "!f() { git checkout feature/MAL-$1; }; f"
+	fa = "!f() { git checkout feature/AI-$1; }; f"
+	hc = "!f() { git checkout hotfix/CORE-$1; }; f"
+	ha = "!f() { git checkout hotfix/AI-$1; }; f"
+	rel = "!f() { git checkout release/16.01.01; }; f"
+	mfc = "!f() { git merge feature/CORE-$1; }; f"
+	mfm = "!f() { git merge feature/MAL-$1; }; f"
+	mfa = "!f() { git merge feature/AI-$1; }; f"
+	mhc = "!f() { git merge hotfix/CORE-$1; }; f"
+	mha = "!f() { git merge hotfix/AI-$1; }; f"
+	st = status
+	br = branch
+	pur = pull --rebase
+	pu = pull
+	hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+	lol = log --oneline --abbrev-commit --graph --decorate
+	psu = push -u origin
+	ps = push
+	pso = push origin
+	resfc = "!f() { git reset --hard origin/feature/CORE-$1; }; f"
+	resfa = "!f() { git reset --hard origin/feature/AI-$1; }; f"
+	reshc = "!f() { git reset --hard origin/hotfix/CORE-$1; }; f"
+	resha = "!f() { git reset --hard origin/hotfix/AI-$1; }; f"
+	rebd = rebase develop
+	rebm = rebase master
+	haut = "! for branch in `git branch --merged master -r *hotfix* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
+	faut = "! for branch in `git branch --merged master -r *feature* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
+	fautnm = "! for branch in `git branch --no-merged master -r *feature* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
+	hautnm = "! for branch in `git branch --no-merged master -r *hotfix* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
+	delfc = "!f() { git branch -d feature/CORE-$1; }; f"
+	delhc = "!f() { git branch -d hotfix/CORE-$1; }; f"
+	delfm = "!f() { git branch -d feature/MALTA-$1; }; f"
+	delhm = "!f() { git branch -d hotfix/MALTA-$1; }; f"
+	delfa = "!f() { git branch -d feature/AI-$1; }; f"
+	delha = "!f() { git branch -d hotfix/AI-$1; }; f"
+	delrfc = "!f() { git pso --delete feature/CORE-$1; }; f"
+	delrhc = "!f() { git pso --delete hotfix/CORE-$1; }; f"
+	delrfm = "!f() { git pso --delete feature/MALTA-$1; }; f"
+	delrhm = "!f() { git pso --delete hotfix/MALTA-$1; }; f"
+	delrfa = "!f() { git pso --delete feature/AI-$1; }; f"
+	delrha = "!f() { git pso --delete hotfix/AI-$1; }; f"
