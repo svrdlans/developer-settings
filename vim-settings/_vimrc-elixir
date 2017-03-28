@@ -1,0 +1,106 @@
+" map <leader> key to comma
+let mapleader=","
+
+" map <leader>q to :q<cr>
+nnoremap <leader>q :q<cr>
+vnoremap <leader>q :q<cr>
+
+" map <leader>tt to tabnew + Enter
+nnoremap <leader>tt :tabnew <cr>
+vnoremap <leader>tt :tabnew <cr>
+" map <leader>tp to tabprevious + Enter
+nnoremap <leader>tp :tabprevious<cr>
+vnoremap <leader>tp :tabprevious<cr>
+" map <leader>tn to tabnext + Enter
+nnoremap <leader>tn :tabnext<cr>
+vnoremap <leader>tn :tabnext<cr>
+" map <leader>tc to tabclose + Enter
+nnoremap <leader>tc :tabclose<cr>
+vnoremap <leader>tc :tabclose<cr>
+
+" map <leader>ww to Ctrl+W Ctrl+W
+nnoremap <leader>ww <C-W><C-W>
+vnoremap <leader>ww <C-W><C-W>
+" map <leader>wv to :vsplit<cr>
+nnoremap <leader>wv :vsplit<cr>
+vnoremap <leader>wv :vsplit<cr>
+" map <leader>wh to :split<cr>
+nnoremap <leader>wh :split<cr>
+vnoremap <leader>wh :split<cr>
+
+" from mswin.vim: backspace and cursor keys wrap to previous/next line
+set backspace=indent,eol,start whichwrap+=<,>,[,]
+" from mswin.vim: backspace in Visual mode deletes selection
+vnoremap <BS> d
+
+" <leader>x is Cut to clipboard
+vnoremap <leader>x "+x
+
+" <leader>y is Copy to clipboard
+vnoremap <leader>y "+y
+
+" <leader>y is Paste from clipboard
+map <leader>p "+gP
+
+" show line numbers
+set number
+" show ruler
+set ruler
+
+" enable indentation
+filetype plugin indent on
+
+" show existing tab with 2 spaces width
+set tabstop=2
+
+" on pressing tab, insert 2 spaces
+set expandtab
+
+" change backup and swp files default directory
+set backupdir-=.
+set dir-=.
+set backupdir=C:\\Programs\\Vim\\temp,.
+set dir=C:\\Programs\\Vim\\temp,.
+
+" set color scheme
+colorscheme industry
+
+" highlight found search patterns
+set hlsearch
+" highlight pattern while typing
+set incsearch
+
+" define plugins
+call plug#begin('~/vimfiles/plugged')
+  Plug 'elixir-lang/vim-elixir'
+  Plug 'slashmili/alchemist.vim'
+call plug#end()
+
+" define function to modify tab label by adding '+' if buffer has changes
+function! GuiTabLabel()
+	  let label = ''
+	  let bufnrlist = tabpagebuflist(v:lnum)
+
+	  " Add '+' if one of the buffers in the tab page is modified
+	  for bufnr in bufnrlist
+	    if getbufvar(bufnr, "&modified")
+	      let label = '+'
+	      break
+	    endif
+	  endfor
+
+	  " Append the number of windows in the tab page if more than one
+	  let wincount = tabpagewinnr(v:lnum, '$')
+	  if wincount > 1
+	    let label .= wincount
+	  endif
+	  if label != ''
+	    let label .= ' '
+	  endif
+
+	  " Append the buffer name
+	  return label . bufname(bufnrlist[tabpagewinnr(v:lnum) - 1])
+	endfunction
+
+" modify tab label to have '+' at the beginning if the buffer is changed
+set guitablabel=%{GuiTabLabel()}
