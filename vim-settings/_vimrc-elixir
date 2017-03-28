@@ -1,9 +1,21 @@
+" use visual bell instead of audio cue
+set visualbell
+
+" set directory listing to use tree view
+let g:netrw_liststyle=3 
 " map <leader> key to comma
 let mapleader=","
+
+" map <leader>le to open directory list
+nnoremap <leader>le :60Lexplore<cr>
+vnoremap <leader>le :60Lexplore<cr>
 
 " map <leader>q to :q<cr>
 nnoremap <leader>q :q<cr>
 vnoremap <leader>q :q<cr>
+
+" map <leader>so to reload _vimrc-elixir
+nnoremap <leader>so :so $MYVIMRC-elixir<cr>
 
 " map <leader>tt to tabnew + Enter
 nnoremap <leader>tt :tabnew <cr>
@@ -17,7 +29,9 @@ vnoremap <leader>tn :tabnext<cr>
 " map <leader>tc to tabclose + Enter
 nnoremap <leader>tc :tabclose<cr>
 vnoremap <leader>tc :tabclose<cr>
-
+" mp <leader>tf to tabnew filename
+nnoremap <leader>te :tabedit<space>
+vnoremap <leader>te :tabedit<space>
 " map <leader>ww to Ctrl+W Ctrl+W
 nnoremap <leader>ww <C-W><C-W>
 vnoremap <leader>ww <C-W><C-W>
