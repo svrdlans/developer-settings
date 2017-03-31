@@ -1,14 +1,30 @@
 " use visual bell instead of audio cue
 set visualbell
 
-" set directory listing to use tree view
-let g:netrw_liststyle=3 
+" define plugins
+call plug#begin('C:\Programs\Vim\vimfiles\plugins')
+  Plug 'elixir-lang/vim-elixir'
+  Plug 'slashmili/alchemist.vim'
+call plug#end()
+
+" enable omnicompletion
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete
+
+" enable indentation
+filetype plugin indent on
+
 " map <leader> key to comma
 let mapleader=","
 
+" set directory listing to use tree view
+let g:netrw_liststyle=3 
+" open file from directory list in new tab
+let g:netrw_browser_split=3
+
 " map <leader>le to open directory list
-nnoremap <leader>le :60Lexplore<cr>
-vnoremap <leader>le :60Lexplore<cr>
+nnoremap <leader>le :30Lexplore<cr>
+vnoremap <leader>le :30Lexplore<cr>
 
 " map <leader>q to :q<cr>
 nnoremap <leader>q :q<cr>
@@ -61,9 +77,6 @@ set number
 " show ruler
 set ruler
 
-" enable indentation
-filetype plugin indent on
-
 " show existing tab with 2 spaces width
 set tabstop=2
 
@@ -86,12 +99,6 @@ colorscheme industry
 set hlsearch
 " highlight pattern while typing
 set incsearch
-
-" define plugins
-call plug#begin('~/vimfiles/plugged')
-  Plug 'elixir-lang/vim-elixir'
-  Plug 'slashmili/alchemist.vim'
-call plug#end()
 
 " define function to modify tab label by adding '+' if buffer has changes
 function! GuiTabLabel()
