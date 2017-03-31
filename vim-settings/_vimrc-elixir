@@ -11,10 +11,14 @@ call plug#end()
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 
+" set windows size
+set lines=40
+set columns=100
+
 " enable indentation
 filetype plugin indent on
 
-" map <leader> key to comma
+" map <Leader> key to comma
 let mapleader=","
 
 " set directory listing to use tree view
@@ -22,55 +26,55 @@ let g:netrw_liststyle=3
 " open file from directory list in new tab
 let g:netrw_browser_split=3
 
-" map <leader>le to open directory list
-nnoremap <leader>le :30Lexplore<cr>
-vnoremap <leader>le :30Lexplore<cr>
+" map <Leader>le to open directory list
+nnoremap <Leader>le :30Lexplore<CR>
+vnoremap <Leader>le :30Lexplore<CR>
 
-" map <leader>q to :q<cr>
-nnoremap <leader>q :q<cr>
-vnoremap <leader>q :q<cr>
+" map <Leader>q to :q<CR>
+nnoremap <Leader>q :q<CR>
+vnoremap <Leader>q :q<CR>
 
-" map <leader>so to reload _vimrc-elixir
-nnoremap <leader>so :so $MYVIMRC-elixir<cr>
+" map <Leader>so to reload _vimrc-elixir
+nnoremap <Leader>so :so $MYVIMRC-elixir<CR>
 
-" map <leader>tt to tabnew + Enter
-nnoremap <leader>tt :tabnew <cr>
-vnoremap <leader>tt :tabnew <cr>
-" map <leader>tp to tabprevious + Enter
-nnoremap <leader>tp :tabprevious<cr>
-vnoremap <leader>tp :tabprevious<cr>
-" map <leader>tn to tabnext + Enter
-nnoremap <leader>tn :tabnext<cr>
-vnoremap <leader>tn :tabnext<cr>
-" map <leader>tc to tabclose + Enter
-nnoremap <leader>tc :tabclose<cr>
-vnoremap <leader>tc :tabclose<cr>
-" mp <leader>tf to tabnew filename
-nnoremap <leader>te :tabedit<space>
-vnoremap <leader>te :tabedit<space>
-" map <leader>ww to Ctrl+W Ctrl+W
-nnoremap <leader>ww <C-W><C-W>
-vnoremap <leader>ww <C-W><C-W>
-" map <leader>wv to :vsplit<cr>
-nnoremap <leader>wv :vsplit<cr>
-vnoremap <leader>wv :vsplit<cr>
-" map <leader>wh to :split<cr>
-nnoremap <leader>wh :split<cr>
-vnoremap <leader>wh :split<cr>
+" map <Leader>tt to tabnew + Enter
+nnoremap <Leader>tt :tabnew <CR>
+vnoremap <Leader>tt :tabnew <CR>
+" map <Leader>tp to tabprevious + Enter
+nnoremap <Leader>tp :tabprevious<CR>
+vnoremap <Leader>tp :tabprevious<CR>
+" map <Leader>tn to tabnext + Enter
+nnoremap <Leader>tn :tabnext<CR>
+vnoremap <Leader>tn :tabnext<CR>
+" map <Leader>tc to tabclose + Enter
+nnoremap <Leader>tc :tabclose<CR>
+vnoremap <Leader>tc :tabclose<CR>
+" mp <Leader>tf to tabnew filename
+nnoremap <Leader>te :tabedit<Space>
+vnoremap <Leader>te :tabedit<Space>
+" map <Leader>ww to Ctrl+W Ctrl+W
+nnoremap <Leader>ww <C-W><C-W>
+vnoremap <Leader>ww <C-W><C-W>
+" map <Leader>wv to :vsplit<CR>
+nnoremap <Leader>wv :vsplit<CR>
+vnoremap <Leader>wv :vsplit<CR>
+" map <Leader>wh to :split<CR>
+nnoremap <Leader>wh :split<CR>
+vnoremap <Leader>wh :split<CR>
 
 " from mswin.vim: backspace and cursor keys wrap to previous/next line
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 " from mswin.vim: backspace in Visual mode deletes selection
 vnoremap <BS> d
 
-" <leader>x is Cut to clipboard
-vnoremap <leader>x "+x
+" <Leader>x is Cut to clipboard
+vnoremap <Leader>x "+x
 
-" <leader>y is Copy to clipboard
-vnoremap <leader>y "+y
+" <Leader>y is Copy to clipboard
+vnoremap <Leader>y "+y
 
-" <leader>y is Paste from clipboard
-map <leader>p "+gP
+" <Leader>y is Paste from clipboard
+map <Leader>p "+gP
 
 " show line numbers
 set number
