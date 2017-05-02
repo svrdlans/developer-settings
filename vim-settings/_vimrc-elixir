@@ -7,6 +7,12 @@ call plug#begin('C:\Programs\Vim\vimfiles\plugins')
   Plug 'slashmili/alchemist.vim'
 call plug#end()
 
+" change backup and swp files default directory
+set backupdir-=.
+set dir-=.
+set backupdir=C:\\Programs\\Vim\\temp,.
+set dir=C:\\Programs\\Vim\\temp,.
+
 " enable omnicompletion
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
@@ -89,12 +95,6 @@ set shiftwidth=2
 
 " on pressing tab, insert 2 spaces
 set expandtab
-
-" change backup and swp files default directory
-set backupdir-=.
-set dir-=.
-set backupdir=C:\\Programs\\Vim\\temp,.
-set dir=C:\\Programs\\Vim\\temp,.
 
 " set color scheme
 colorscheme industry
