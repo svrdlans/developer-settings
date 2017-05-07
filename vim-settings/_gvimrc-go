@@ -1,9 +1,9 @@
-" load main .vimrc
-source ~/.vimrc
+" load main _gvimrc
+source ~\_gvimrc
 
 " define plugins
-call plug#begin('~/.vim/plugged')
-  Plug 'wincent/command-t'
+call plug#begin('~\vimfiles\plugged')
+  Plug 'kien/ctrlp.vim'
   Plug 'fatih/vim-go'
 call plug#end()
 

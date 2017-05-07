@@ -1,17 +1,21 @@
 " use visual bell instead of audio cue
 set visualbell
+" remove menu, toolbar and scrollbar
+set guioptions-=m
+set guioptions-=T
+set guioptions-=r
 
 " map <Leader> key to comma
 let mapleader=","
 
 " define plugins
-call plug#begin('~/.vim/plugged')
-  Plug 'wincent/command-t'
+call plug#begin('~\vimfiles\plugged')
+  Plug 'kien/ctrlp.vim'
   Plug 'danilo-augusto/vim-afterglow'
 call plug#end()
 
-" map <Esc> to close Command-T
-let g:CommandTCancelMap='<Esc>'
+" set maximum number of files to scan
+let g:ctrlp_max_files = 1000
 
 " show line numbers
 set number
@@ -27,14 +31,14 @@ colorscheme afterglow
 " change backup and swp files default directory
 set backupdir-=.
 set dir-=.
-set backupdir=~/.vim/temp,.
-set dir=~/.vim/temp,.
+set backupdir=~\vimfiles\temp,.
+set dir=~\vimfiles\temp,.
 
 " map <Leader>so to reload .vimrc files
-nnoremap <Leader>sov :so $MYVIMRC<CR>
-nnoremap <Leader>soe :so $MYVIMRC-elixir<CR>
-nnoremap <Leader>sog :so $MYVIMRC-go<CR>
-nnoremap <Leader>soj :so $MYVIMRC-js<CR>
+nnoremap <Leader>sov :so $MYGVIMRC<CR>
+nnoremap <Leader>soe :so $MYGVIMRC-elixir<CR>
+nnoremap <Leader>sog :so $MYGVIMRC-go<CR>
+nnoremap <Leader>soj :so $MYGVIMRC-js<CR>
 
 " highlight found search patterns
 set hlsearch

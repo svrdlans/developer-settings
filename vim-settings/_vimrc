@@ -1,8 +1,153 @@
 " use visual bell instead of audio cue
 set visualbell
 
+" map <Leader> key to comma
+let mapleader=","
+
 " define plugins
-call plug#begin('C:\Programs\Vim\vimfiles\plugins')
-  Plug 'elixir-lang/vim-elixir'
-  Plug 'slashmili/alchemist.vim'
+call plug#begin('~\vimfiles\plugged')
+  Plug 'kien/ctrlp.vim'
+  Plug 'danilo-augusto/vim-afterglow'
 call plug#end()
+
+" set maximum number of files to scan
+let g:ctrlp_max_files = 1000
+
+" show line numbers
+set number
+" show ruler
+set ruler
+" always show status line
+set laststatus=2
+
+" set color scheme
+colorscheme afterglow
+
+" --- COMMON CONFIGURATION ---
+" change backup and swp files default directory
+set backupdir-=.
+set dir-=.
+set backupdir=~\vimfiles\temp,.
+set dir=~\vimfiles\temp,.
+
+" map <Leader>so to reload .vimrc files
+nnoremap <Leader>sov :so $MYVIMRC<CR>
+nnoremap <Leader>soe :so $MYVIMRC-elixir<CR>
+nnoremap <Leader>sog :so $MYVIMRC-go<CR>
+nnoremap <Leader>soj :so $MYVIMRC-js<CR>
+
+" highlight found search patterns
+set hlsearch
+" highlight pattern while typing
+set incsearch
+" map <Leader><Space> to clear highlights after search
+nnoremap <silent> <Leader><Space> :noh<CR>
+
+" from mswin.vim: backspace and cursor keys wrap to previous/next line
+set backspace=indent,eol,start whichwrap+=<,>,[,]
+" from mswin.vim: backspace in Visual mode deletes selection
+vnoremap <BS> d
+
+
+" <--- DIRECTORY LISTING CONFIGURATION ---
+" set directory listing to use tree view
+let g:netrw_liststyle=3 
+" open file from directory list in new tab
+let g:netrw_browser_split=3
+
+" map <Leader>le to open directory list
+nnoremap <Leader>le :30Lexplore<CR>
+vnoremap <Leader>le :30Lexplore<CR>
+" --- DIRECTORY LISTING CONFIGURATION --->
+
+
+" map <Leader>q to :q<CR>
+nnoremap <Leader>q :q<CR>
+vnoremap <Leader>q :q<CR>
+
+" map <Leader>tt to tabnew + Enter
+nnoremap <Leader>tt :tabnew <CR>
+vnoremap <Leader>tt :tabnew <CR>
+" map <Leader>tp to tabprevious + Enter
+nnoremap <Leader>tp :tabprevious<CR>
+vnoremap <Leader>tp :tabprevious<CR>
+" map <Leader>tn to tabnext + Enter
+nnoremap <Leader>tn :tabnext<CR>
+vnoremap <Leader>tn :tabnext<CR>
+" map <Leader>tc to tabclose + Enter
+nnoremap <Leader>tc :tabclose<CR>
+vnoremap <Leader>tc :tabclose<CR>
+" mp <Leader>tf to tabnew filename
+nnoremap <Leader>te :tabedit<Space>
+vnoremap <Leader>te :tabedit<Space>
+" map <Leader>ww to Ctrl+W Ctrl+W
+nnoremap <Leader>ww <C-W><C-W>
+vnoremap <Leader>ww <C-W><C-W>
+" map <Leader>wj to Ctrl+W j
+nnoremap <Leader>wj <C-W>j
+vnoremap <Leader>wj <C-W>j
+" map <Leader>wk to Ctrl+W k
+nnoremap <Leader>wk <C-W>k
+vnoremap <Leader>wk <C-W>k
+" map <Leader>wl to Ctrl+W l
+nnoremap <Leader>wl <C-W>l
+vnoremap <Leader>wl <C-W>l
+" map <Leader>wh to Ctrl+W h
+nnoremap <Leader>wh <C-W>h
+vnoremap <Leader>wh <C-W>h
+" map <Leader>w[ to Ctrl+W <
+nnoremap <Leader>w[ <C-W><
+vnoremap <Leader>w[ <C-W><
+" map <Leader>w] to Ctrl+W >
+nnoremap <Leader>w] <C-W>>
+vnoremap <Leader>w] <C-W>>
+" map <Leader>wi to Ctrl+W -
+nnoremap <Leader>wi <C-W>-
+vnoremap <Leader>wi <C-W>-
+" map <Leader>wo to Ctrl+W +
+nnoremap <Leader>wo <C-W>+
+vnoremap <Leader>wo <C-W>+
+" map <Leader>wv to :vsplit<CR>
+nnoremap <Leader>wv :vsplit<CR>
+vnoremap <Leader>wv :vsplit<CR>
+" map <Leader>wh to :split<CR>
+nnoremap <Leader>ws :split<CR>
+vnoremap <Leader>ws :split<CR>
+
+" <Leader>x is Cut to clipboard
+vnoremap <Leader>x "+x
+
+" <Leader>y is Copy to clipboard
+vnoremap <Leader>y "+y
+
+" <Leader>y is Paste from clipboard
+map <Leader>p "+gP
+
+" define function to modify tab label by adding '+' if buffer has changes
+function! GuiTabLabel()
+  let label = ''
+  let bufnrlist = tabpagebuflist(v:lnum)
+
+  " Add '+' if one of the buffers in the tab page is modified
+  for bufnr in bufnrlist
+    if getbufvar(bufnr, "&modified")
+      let label = '+'
+      break
+    endif
+  endfor
+
+  " Append the number of windows in the tab page if more than one
+  let wincount = tabpagewinnr(v:lnum, '$')
+  if wincount > 1
+    let label .= wincount
+  endif
+  if label != ''
+    let label .= ' '
+  endif
+
+  " Append the buffer name
+  return label . bufname(bufnrlist[tabpagewinnr(v:lnum) - 1])
+endfunction
+
+" modify tab label to have '+' at the beginning if the buffer is changed
+set guitablabel=%{GuiTabLabel()}

@@ -2,7 +2,7 @@
 set visualbell
 
 " define plugins
-call plug#begin('C:\Programs\Vim\vimfiles\plugins')
+call plug#begin('~\vimfiles\plugged')
   Plug 'elixir-lang/vim-elixir'
   Plug 'slashmili/alchemist.vim'
 call plug#end()
