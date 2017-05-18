@@ -1,53 +1,93 @@
-" use visual bell instead of audio cue
-set visualbell
-
-" map <Leader> key to comma
-let mapleader=","
+" disable indentation
+filetype plugin indent off
 
 " define plugins
 call plug#begin('~/.vim/plugged')
-  Plug 'wincent/command-t'
+  Plug 'fatih/vim-go'
+  Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'Shougo/neocomplete.vim'
   Plug 'danilo-augusto/vim-afterglow'
+  " Plug 'vim-syntastic/syntastic'
+  Plug 'w0rp/ale'
+  Plug 'pangloss/vim-javascript'
+  Plug 'sbdchd/neoformat'
+  Plug 'prettier/prettier'
 call plug#end()
 
-" map <Esc> to close Command-T
-let g:CommandTCancelMap='<Esc>'
+" enable filetype plugins
+filetype plugin indent on
 
+" map <Esc> to close Command-T
+"let g:CommandTCancelMap='<Esc>'
+
+" use visual bell instead of audio cue
+set visualbell
 " show line numbers
 set number
 " show ruler
 set ruler
 " always show status line
 set laststatus=2
+" show typed commands
+set showcmd
+" no swap file
+set noswapfile
+" no backup files
+set nobackup
+" speed up syntax highlighting
+set nocursorcolumn
+" set completion window max size
+set pumheight=10
+" don't wrap lines
+set nowrap
+set ignorecase
+set smartcase
 
-" set color scheme
-colorscheme afterglow
+" use clipboard without pbcopy
+set clipboard^=unnamed
+set clipboard^=unnamedplus
 
-" --- COMMON CONFIGURATION ---
-" change backup and swp files default directory
-set backupdir-=.
-set dir-=.
-set backupdir=~/.vim/temp,.
-set dir=~/.vim/temp,.
+set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ \ [%l/%L]\ (%p%%)\  
 
-" map <Leader>so to reload .vimrc files
-nnoremap <Leader>sov :so $MYVIMRC<CR>
-nnoremap <Leader>soe :so $MYVIMRC-elixir<CR>
-nnoremap <Leader>sog :so $MYVIMRC-go<CR>
-nnoremap <Leader>soj :so $MYVIMRC-js<CR>
+autocmd BufNewFile,BufRead *.go setlocal expandtab tabstop=8 shiftwidth=8
+autocmd BufNewFile,BufRead *.js setlocal expandtab tabstop=4 shiftwidth=4
+
+au BufNewFile,BufRead *.py
+    \ set tabstop=4
+    \ set softtabstop=4
+    \ set shiftwidth=4
+    \ set textwidth=79
+    \ set expandtab
+    \ set autoindent
+    \ set fileformat=unix
 
 " highlight found search patterns
 set hlsearch
 " highlight pattern while typing
 set incsearch
-" map <Leader><Space> to clear highlights after search
-nnoremap <silent> <Leader><Space> :noh<CR>
 
 " from mswin.vim: backspace and cursor keys wrap to previous/next line
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 " from mswin.vim: backspace in Visual mode deletes selection
 vnoremap <BS> d
 
+" set color scheme
+colorscheme afterglow
+
+"----------------------------------------------
+" MAPPINGS
+"----------------------------------------------
+" map <leader> key to comma
+let mapleader=","
+
+" map <leader><Space> to clear highlights after search
+nnoremap <silent> <leader><Space> :noh<cr>
+
+" map <leader>so to reload .vimrc files
+nnoremap <leader>sov :so $MYVIMRC<cr>
+" nnoremap <leader>soe :so $MYVIMRC-elixir<cr>
+" nnoremap <leader>sog :so $MYVIMRC-go<cr>
+" nnoremap <leader>soj :so $MYVIMRC-js<cr>
 
 " <--- DIRECTORY LISTING CONFIGURATION ---
 " set directory listing to use tree view
@@ -55,73 +95,265 @@ let g:netrw_liststyle=3
 " open file from directory list in new tab
 let g:netrw_browser_split=3
 
-" map <Leader>le to open directory list
-nnoremap <Leader>le :30Lexplore<CR>
-vnoremap <Leader>le :30Lexplore<CR>
+" map <leader>le to open directory list
+nnoremap <leader>le :30Lexplore<cr>
+vnoremap <leader>le :30Lexplore<cr>
 " --- DIRECTORY LISTING CONFIGURATION --->
 
 
-" map <Leader>q to :q<CR>
-nnoremap <Leader>q :q<CR>
-vnoremap <Leader>q :q<CR>
+" map <leader>q to :q<cr>
+nnoremap <leader>q :q<cr>
+vnoremap <leader>q :q<cr>
 
-" map <Leader>tt to tabnew + Enter
-nnoremap <Leader>tt :tabnew <CR>
-vnoremap <Leader>tt :tabnew <CR>
-" map <Leader>tp to tabprevious + Enter
-nnoremap <Leader>tp :tabprevious<CR>
-vnoremap <Leader>tp :tabprevious<CR>
-" map <Leader>tn to tabnext + Enter
-nnoremap <Leader>tn :tabnext<CR>
-vnoremap <Leader>tn :tabnext<CR>
-" map <Leader>tc to tabclose + Enter
-nnoremap <Leader>tc :tabclose<CR>
-vnoremap <Leader>tc :tabclose<CR>
-" mp <Leader>tf to tabnew filename
-nnoremap <Leader>te :tabedit<Space>
-vnoremap <Leader>te :tabedit<Space>
-" map <Leader>ww to Ctrl+W Ctrl+W
-nnoremap <Leader>ww <C-W><C-W>
-vnoremap <Leader>ww <C-W><C-W>
-" map <Leader>wj to Ctrl+W j
-nnoremap <Leader>wj <C-W>j
-vnoremap <Leader>wj <C-W>j
-" map <Leader>wk to Ctrl+W k
-nnoremap <Leader>wk <C-W>k
-vnoremap <Leader>wk <C-W>k
-" map <Leader>wl to Ctrl+W l
-nnoremap <Leader>wl <C-W>l
-vnoremap <Leader>wl <C-W>l
-" map <Leader>wh to Ctrl+W h
-nnoremap <Leader>wh <C-W>h
-vnoremap <Leader>wh <C-W>h
-" map <Leader>w[ to Ctrl+W <
-nnoremap <Leader>w[ <C-W><
-vnoremap <Leader>w[ <C-W><
-" map <Leader>w] to Ctrl+W >
-nnoremap <Leader>w] <C-W>>
-vnoremap <Leader>w] <C-W>>
-" map <Leader>wi to Ctrl+W -
-nnoremap <Leader>wi <C-W>-
-vnoremap <Leader>wi <C-W>-
-" map <Leader>wo to Ctrl+W +
-nnoremap <Leader>wo <C-W>+
-vnoremap <Leader>wo <C-W>+
-" map <Leader>wv to :vsplit<CR>
-nnoremap <Leader>wv :vsplit<CR>
-vnoremap <Leader>wv :vsplit<CR>
-" map <Leader>wh to :split<CR>
-nnoremap <Leader>ws :split<CR>
-vnoremap <Leader>ws :split<CR>
+" map <leader>tt to tabnew + Enter
+nnoremap <leader>tt :tabnew <cr>
+vnoremap <leader>tt :tabnew <cr>
+" map <leader>tp to tabprevious + Enter
+nnoremap <leader>tp :tabprevious<cr>
+vnoremap <leader>tp :tabprevious<cr>
+" map <leader>tn to tabnext + Enter
+nnoremap <leader>tn :tabnext<cr>
+vnoremap <leader>tn :tabnext<cr>
+" map <leader>tc to tabclose + Enter
+nnoremap <leader>tc :tabclose<cr>
+vnoremap <leader>tc :tabclose<cr>
+" mp <leader>tf to tabnew filename
+nnoremap <leader>te :tabedit<Space>
+vnoremap <leader>te :tabedit<Space>
+" map <leader>ww to Ctrl+W Ctrl+W
+nnoremap <leader>ww <C-W><C-W>
+vnoremap <leader>ww <C-W><C-W>
+" map <leader>wj to Ctrl+W j
+nnoremap <leader>wj <C-W>j
+vnoremap <leader>wj <C-W>j
+" map <leader>wk to Ctrl+W k
+nnoremap <leader>wk <C-W>k
+vnoremap <leader>wk <C-W>k
+" map <leader>wl to Ctrl+W l
+nnoremap <leader>wl <C-W>l
+vnoremap <leader>wl <C-W>l
+" map <leader>wh to Ctrl+W h
+nnoremap <leader>wh <C-W>h
+vnoremap <leader>wh <C-W>h
+" map <leader>w[ to Ctrl+W <
+nnoremap <leader>w[ <C-W><
+vnoremap <leader>w[ <C-W><
+" map <leader>w] to Ctrl+W >
+nnoremap <leader>w] <C-W>>
+vnoremap <leader>w] <C-W>>
+" map <leader>wi to Ctrl+W -
+nnoremap <leader>wi <C-W>-
+vnoremap <leader>wi <C-W>-
+" map <leader>wo to Ctrl+W +
+nnoremap <leader>wo <C-W>+
+vnoremap <leader>wo <C-W>+
+" map <leader>wv to :vsplit<cr>
+nnoremap <leader>wv :vsplit<cr>
+vnoremap <leader>wv :vsplit<cr>
+" map <leader>wh to :split<cr>
+nnoremap <leader>ws :split<cr>
+vnoremap <leader>ws :split<cr>
 
-" <Leader>x is Cut to clipboard
-vnoremap <Leader>x "+x
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
 
-" <Leader>y is Copy to clipboard
-vnoremap <Leader>y "+y
+" <leader>x is Cut to clipboard
+vnoremap <leader>x "+x
 
-" <Leader>y is Paste from clipboard
-map <Leader>p "+gP
+" <leader>y is Copy to clipboard
+vnoremap <leader>y "+y
+
+" <leader>y is Paste from clipboard
+map <leader>p "+gP
+
+"--------------------------------------------------------------
+" BUFFERS
+"--------------------------------------------------------------
+" list buffers
+nnoremap <leader>bl :ls!<cr>
+" open buffer by number
+nnoremap <Leader>1 :1b<CR>
+nnoremap <Leader>2 :2b<CR>
+nnoremap <Leader>3 :3b<CR>
+nnoremap <Leader>4 :4b<CR>
+nnoremap <Leader>5 :5b<CR>
+nnoremap <Leader>6 :6b<CR>
+nnoremap <Leader>7 :7b<CR>
+nnoremap <Leader>8 :8b<CR>
+nnoremap <Leader>9 :9b<CR>
+nnoremap <Leader>0 :10b<CR>
+
+
+
+"--------------------------------------------------------------
+" PLUGINS
+"--------------------------------------------------------------
+"
+"
+"---------------------------------------------
+" vim-go
+"---------------------------------------------
+let g:go_fmt_fail_silently = 1
+let g:go_fmt_command = "goimports"
+let g:go_autodetect_gopath = 1
+let g:go_list_type = "quickfix"
+let g:go_auto_type_info = 0
+let g:go_echo_command_info= 0
+
+let g:go_highlight_space_tab_error = 0
+let g:go_highlight_array_whitespace_error = 0
+let g:go_highlight_trailing_whitespace_error = 0
+let g:go_highlight_extra_types = 0
+let g:go_highlight_build_constraints = 1
+
+nmap <C-g> :GoDecls<cr>
+
+augroup go
+  autocmd!
+
+  autocmd FileType go nmap <silent> <leader>gv <Plug>(go-def-vertical)
+  autocmd FileType go nmap <silent> <leader>gs <Plug>(go-def-split)
+
+  autocmd FileType go nmap <silent> <leader>gi <Plug>(go-info)
+  autocmd FileType go nmap <silent> <leader>gl <Plug>(go-metalinter)
+
+  " autocmd FileType go nmap <silent> <leader>b :<C-u>call <SID>build_go_files()<cr>
+  autocmd FileType go nmap <silent> <leader>gt  <Plug>(go-test)
+  autocmd FileType go nmap <silent> <leader>gr  <Plug>(go-run)
+  autocmd FileType go nmap <silent> <leader>ge  <Plug>(go-install)
+
+  autocmd FileType go nmap <silent> <leader>gd <Plug>(go-doc)
+  autocmd FileType go nmap <silent> <leader>gc <Plug>(go-coverage-toggle)
+
+  " I like these more!
+  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+augroup ENog
+
+"------------------------------------------------------------------------------
+" Syntastic
+"------------------------------------------------------------------------------
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"
+"let g:syntastic_aggregate_errors = 1
+"let g:syntastic_always_populate_loc_list = 0
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"
+"let g:syntastic_python_checkers = ['python']
+"let g:syntastic_javascript_checkers = ['eslint']
+
+" map keys to scroll the error list
+nnoremap <leader>lj :lnext<cr>
+nnoremap <leader>lk :lprev<cr>
+nnoremap <leader>lo :lopen<cr>
+nnoremap <leader>lc :lclose<cr>
+
+"------------------------------------------------------------------------------
+" ale
+"------------------------------------------------------------------------------
+set statusline+=%#warningmsg#
+set statusline+=%{ALEGetStatusLine()}
+set statusline+=%*
+
+
+
+"------------------------------------------------------------------------------
+" NeoComplete
+"------------------------------------------------------------------------------
+
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
+" Close popup by <Space>.
+" inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+"inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <cr>: close popup and save indent.
+inoremap <silent> <cr> <C-r>=<SID>my_cr_function()<cr>
+function! s:my_cr_function()
+  return pumvisible() ? neocomplete#close_popup() : "\<cr>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplete#close_popup()
+inoremap <expr><C-e>  neocomplete#cancel_popup()
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+
+" AutoComplPop like behavior.
+let g:neocomplete#enable_auto_select = 1
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion.
+"if !exists('g:neocomplete#sources#omni#input_patterns')
+"  let g:neocomplete#sources#omni#input_patterns = {}
+"endif
+"let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
+endif
+let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
+
+
+"---------------------------------------------
+" javascript plugins
+"---------------------------------------------
+" <--- JAVASCRIPT FORMATTING ---
+" set formatting program with args
+set formatprg=prettier\ --stdin\ --single-quote
+" use formatprg when available
+let g:neoformat_try_formatprg = 1
+" map Ctrl-F to format js code
+nnoremap <c-f> :Neoformat prettier<cr>
+" --- JAVASCRIPT FORMATTING --->
+
+
+" <--- JAVASCRIPT LINTING AND HINTS ---
+" lint javascript files after reading it
+"let jshint2_read = 0
+" lint javascript files after saving it
+" let jshint2_save = 1
+" automatically close orphaned error lists:
+"let jshint2_close = 1
+" Set min and max height of error list:
+"let jshint2_min_height = 3
+"let jshint2_max_height = 12
+
+" --- JAVASCRIPT LINTING AND HINTS --->
+
+
 
 " define function to modify tab label by adding '+' if buffer has changes
 function! GuiTabLabel()
