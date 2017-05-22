@@ -1,0 +1,19 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+        "jsx": true
+    }
+  },
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "eqeqeq": "warn",
+    "semi": "warn",
+    "react/prefer-es6-class": [2, "always"],
+    "react/self-closing-comp": ["error", {
+      "component": false
+    }]
+  }
+}

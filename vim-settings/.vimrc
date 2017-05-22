@@ -49,8 +49,8 @@ set clipboard^=unnamedplus
 
 set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ \ [%l/%L]\ (%p%%)\  
 
-autocmd BufNewFile,BufRead *.go setlocal expandtab tabstop=8 shiftwidth=8
-autocmd BufNewFile,BufRead *.js setlocal expandtab tabstop=4 shiftwidth=4
+autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=8 shiftwidth=8
+autocmd BufNewFile,BufRead *.js setlocal noexpandtab tabstop=2 shiftwidth=2
 
 au BufNewFile,BufRead *.py
     \ set tabstop=4
@@ -207,8 +207,17 @@ let g:go_highlight_array_whitespace_error = 0
 let g:go_highlight_trailing_whitespace_error = 0
 let g:go_highlight_extra_types = 0
 let g:go_highlight_build_constraints = 1
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_auto_sameids = 0
 
 nmap <C-g> :GoDecls<cr>
+nnoremap <silent> <leader>fd :GoSameIds<cr>
+nnoremap <silent> <leader>ff :GoSameIdsClear<cr>
+nnoremap <silent> <leader>fr :GoReferrers<cr>
+nnoremap <silent> <leader>rn :GoRename<space>
 
 augroup go
   autocmd!
@@ -226,7 +235,7 @@ augroup go
 
   autocmd FileType go nmap <silent> <leader>gd <Plug>(go-doc)
   autocmd FileType go nmap <silent> <leader>gc <Plug>(go-coverage-toggle)
-
+  
   " I like these more!
   autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
   autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
@@ -256,19 +265,27 @@ nnoremap <leader>lk :lprev<cr>
 nnoremap <leader>lo :lopen<cr>
 nnoremap <leader>lc :lclose<cr>
 
+"" map keys to scroll the error quickfix list
+nnoremap <leader>cj :cnext<cr>
+nnoremap <leader>ck :cprev<cr>
+nnoremap <leader>co :copen<cr>
+nnoremap <leader>cc :cclose<cr>
+
 "------------------------------------------------------------------------------
 " ale
 "------------------------------------------------------------------------------
 set statusline+=%#warningmsg#
 set statusline+=%{ALEGetStatusLine()}
 set statusline+=%*
-
+let g:ale_javascript_eslint_use_global = 1
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\}
 
 
 "------------------------------------------------------------------------------
 " NeoComplete
 "------------------------------------------------------------------------------
-
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
 
@@ -328,30 +345,15 @@ let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
 
 
 "---------------------------------------------
-" javascript plugins
+" prettier
 "---------------------------------------------
-" <--- JAVASCRIPT FORMATTING ---
 " set formatting program with args
-set formatprg=prettier\ --stdin\ --single-quote
+set formatprg=prettier\ --stdin\ --print-width\ 120\ --single-quote
 " use formatprg when available
 let g:neoformat_try_formatprg = 1
 " map Ctrl-F to format js code
 nnoremap <c-f> :Neoformat prettier<cr>
-" --- JAVASCRIPT FORMATTING --->
 
-
-" <--- JAVASCRIPT LINTING AND HINTS ---
-" lint javascript files after reading it
-"let jshint2_read = 0
-" lint javascript files after saving it
-" let jshint2_save = 1
-" automatically close orphaned error lists:
-"let jshint2_close = 1
-" Set min and max height of error list:
-"let jshint2_min_height = 3
-"let jshint2_max_height = 12
-
-" --- JAVASCRIPT LINTING AND HINTS --->
 
 
 
