@@ -7,6 +7,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'ctrlpvim/ctrlp.vim'
   Plug 'Shougo/neocomplete.vim'
   Plug 'danilo-augusto/vim-afterglow'
+  Plug 'fatih/molokai'
   " Plug 'vim-syntastic/syntastic'
   Plug 'w0rp/ale'
   Plug 'pangloss/vim-javascript'
@@ -71,8 +72,15 @@ set backspace=indent,eol,start whichwrap+=<,>,[,]
 " from mswin.vim: backspace in Visual mode deletes selection
 vnoremap <BS> d
 
+"----------------------------------------------
+" colorscheme
+"----------------------------------------------
 " set color scheme
+let g:rehash256 = 1
+"let g:molokai_original = 1
 colorscheme afterglow
+"colorscheme molokai
+
 
 "----------------------------------------------
 " MAPPINGS
@@ -225,6 +233,7 @@ nnoremap <silent> <leader>fd :GoSameIds<cr>
 nnoremap <silent> <leader>ff :GoSameIdsClear<cr>
 nnoremap <silent> <leader>fr :GoReferrers<cr>
 nnoremap <silent> <leader>rn :GoRename<space>
+nnoremap <leader>fi :GoImpl<cr>
 
 augroup go
   autocmd!
