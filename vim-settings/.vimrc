@@ -1,14 +1,18 @@
 " disable indentation
 filetype plugin indent off
 
+" set nocompatibility mode
+set nocompatible
+
 " define plugins
 call plug#begin('~/.vim/plugged')
   Plug 'fatih/vim-go'
   Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'tpope/vim-vinegar'
   Plug 'Shougo/neocomplete.vim'
+  Plug 'Raimondi/delimitMate'
   Plug 'danilo-augusto/vim-afterglow'
   Plug 'fatih/molokai'
-  " Plug 'vim-syntastic/syntastic'
   Plug 'w0rp/ale'
   Plug 'pangloss/vim-javascript'
   Plug 'sbdchd/neoformat'
@@ -17,9 +21,6 @@ call plug#end()
 
 " enable filetype plugins
 filetype plugin indent on
-
-" map <Esc> to close Command-T
-"let g:CommandTCancelMap='<Esc>'
 
 " use visual bell instead of audio cue
 set visualbell
@@ -44,22 +45,25 @@ set nowrap
 set ignorecase
 set smartcase
 
+set nohidden
+
 " use clipboard without pbcopy
 set clipboard^=unnamed
 set clipboard^=unnamedplus
 
-set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\ \ [%l/%L]\ (%p%%)\  
+set statusline=%F%m%r%h%w\ [type=%y\ %{&ff}]\ \[buff=%n]\ [%l/%L\,%c]\ (%p%%)\  
 
 autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=8 shiftwidth=8
 autocmd BufNewFile,BufRead *.js setlocal noexpandtab tabstop=2 shiftwidth=2
+autocmd BufNewFile,BufRead *.yml setlocal expandtab tabstop=2 shiftwidth=2
 
 au BufNewFile,BufRead *.py
-    \ set tabstop=4
-    \ set softtabstop=4
-    \ set shiftwidth=4
-    \ set textwidth=79
-    \ set expandtab
-    \ set autoindent
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
     \ set fileformat=unix
 
 " highlight found search patterns
@@ -76,10 +80,11 @@ vnoremap <BS> d
 " colorscheme
 "----------------------------------------------
 " set color scheme
-let g:rehash256 = 1
-"let g:molokai_original = 1
 colorscheme afterglow
+"let g:rehash256 = 1
+"let g:molokai_original = 1
 "colorscheme molokai
+
 
 
 "----------------------------------------------
@@ -90,22 +95,31 @@ let mapleader=","
 
 " map <leader><Space> to clear highlights after search
 nnoremap <silent> <leader><Space> :noh<cr>
+" map <leader>t to toggle case of word under cursor
+nnoremap <f3> gUiw<esc>
+nnoremap <F4> guiw<esc>
 
 " map <leader>so to reload .vimrc files
 nnoremap <leader>sov :so $MYVIMRC<cr>
-" nnoremap <leader>soe :so $MYVIMRC-elixir<cr>
-" nnoremap <leader>sog :so $MYVIMRC-go<cr>
-" nnoremap <leader>soj :so $MYVIMRC-js<cr>
 
 " <--- DIRECTORY LISTING CONFIGURATION ---
 " set directory listing to use tree view
 let g:netrw_liststyle=3 
-" open file from directory list in new tab
-let g:netrw_browser_split=3
+" force vertical split when previewing file
+let g:netrw_preview=1
+" fast directory browsing
+let g:netrw_fastbrowse=2
+" keep the current directory the same as the browsing DIRECTORY
+let g:netrw_keepdir=0
+" change to right splitting
+let g:netwr_altv=1
+" use special highlighting for certain files
+let g:netwr_special_syntax=1
+" open files in the same window on the right
+let g:netrw_browse_split=4
 
 " map <leader>le to open directory list
-nnoremap <leader>le :30Lexplore<cr>
-vnoremap <leader>le :30Lexplore<cr>
+nnoremap <leader>le :20Lexplore<cr>
 " --- DIRECTORY LISTING CONFIGURATION --->
 
 
@@ -232,7 +246,7 @@ nmap <C-g> :GoDecls<cr>
 nnoremap <silent> <leader>fd :GoSameIds<cr>
 nnoremap <silent> <leader>ff :GoSameIdsClear<cr>
 nnoremap <silent> <leader>fr :GoReferrers<cr>
-nnoremap <silent> <leader>rn :GoRename<space>
+nnoremap <leader>rn :GoRename<space>
 nnoremap <leader>fi :GoImpl<cr>
 
 augroup go
@@ -244,10 +258,10 @@ augroup go
   autocmd FileType go nmap <silent> <leader>gi <Plug>(go-info)
   autocmd FileType go nmap <silent> <leader>gl <Plug>(go-metalinter)
 
-  " autocmd FileType go nmap <silent> <leader>b :<C-u>call <SID>build_go_files()<cr>
-  autocmd FileType go nmap <silent> <leader>gt  <Plug>(go-test)
-  autocmd FileType go nmap <silent> <leader>gr  <Plug>(go-run)
-  autocmd FileType go nmap <silent> <leader>ge  <Plug>(go-install)
+  autocmd FileType go nmap <silent> <leader>gb <Plug>(go-build)
+  autocmd FileType go nmap <silent> <leader>gt <Plug>(go-test)
+  autocmd FileType go nmap <silent> <leader>gr <Plug>(go-run)
+  autocmd FileType go nmap <silent> <leader>ge <Plug>(go-install)
 
   autocmd FileType go nmap <silent> <leader>gd <Plug>(go-doc)
   autocmd FileType go nmap <silent> <leader>gc <Plug>(go-coverage-toggle)
