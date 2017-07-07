@@ -11,6 +11,9 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-vinegar'
   Plug 'Shougo/neocomplete.vim'
   Plug 'Raimondi/delimitMate'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-surround'
+  Plug 'altercation/vim-colors-solarized' 
   Plug 'danilo-augusto/vim-afterglow'
   Plug 'fatih/molokai'
   Plug 'w0rp/ale'
@@ -58,12 +61,12 @@ autocmd BufNewFile,BufRead *.js setlocal noexpandtab tabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead *.yml setlocal expandtab tabstop=2 shiftwidth=2
 
 au BufNewFile,BufRead *.py
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
-    \ set textwidth=79 |
-    \ set expandtab |
-    \ set autoindent |
+    \ set tabstop=4
+    \ set softtabstop=4
+    \ set shiftwidth=4
+    \ set textwidth=79
+    \ set expandtab
+    \ set autoindent
     \ set fileformat=unix
 
 " highlight found search patterns
@@ -80,11 +83,16 @@ vnoremap <BS> d
 " colorscheme
 "----------------------------------------------
 " set color scheme
-colorscheme afterglow
+"colorscheme afterglow
 "let g:rehash256 = 1
 "let g:molokai_original = 1
 "colorscheme molokai
-
+"----------------------------------------------
+" solarized
+"----------------------------------------------
+syntax enable
+set background=dark
+colorscheme solarized
 
 
 "----------------------------------------------
@@ -119,7 +127,7 @@ let g:netwr_special_syntax=1
 let g:netrw_browse_split=4
 
 " map <leader>le to open directory list
-nnoremap <leader>le :20Lexplore<cr>
+nnoremap <leader>le :15Lexplore<cr>
 " --- DIRECTORY LISTING CONFIGURATION --->
 
 
@@ -213,7 +221,10 @@ nnoremap <Leader>0 :10b<CR>
 " PLUGINS
 "--------------------------------------------------------------
 
-
+"--------------------------------------------------------------
+" fugitive
+"--------------------------------------------------------------
+set statusline+=%{fugitive#statusline()}\ 
 "--------------------------------------------------------------
 " ctrlp
 "--------------------------------------------------------------
@@ -346,6 +357,7 @@ endfunction
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
 " <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><Space> pumvisible() ? neocomplete#smart_close_popup() : "\<Space>"
 inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><C-y>  neocomplete#close_popup()
