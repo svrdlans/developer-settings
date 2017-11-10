@@ -6,17 +6,35 @@ set nocompatible
 
 " define plugins
 call plug#begin('~/.vim/plugged')
+" Go plugins
   Plug 'fatih/vim-go'
+
+" Elixir plugins
+  Plug 'elixir-lang/vim-elixir'
+  Plug 'avdgaag/vim-phoenix' 
+
+" Fuzzy file search
   Plug 'ctrlpvim/ctrlp.vim'
+
+" Directory browsing 
   Plug 'tpope/vim-vinegar'
+ 
+
   Plug 'Shougo/neocomplete.vim'
   Plug 'Raimondi/delimitMate'
-  Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
+
+" Git plugins
+"  Plug 'tpope/vim-fugitive'
+"
+" Theme plugins
   Plug 'altercation/vim-colors-solarized' 
-  Plug 'danilo-augusto/vim-afterglow'
-  Plug 'fatih/molokai'
+"  Plug 'danilo-augusto/vim-afterglow'
+  "Plug 'fatih/molokai'
+  
   Plug 'w0rp/ale'
+  
+" Javascript plugins
   Plug 'pangloss/vim-javascript'
   Plug 'sbdchd/neoformat'
   Plug 'prettier/prettier'
@@ -31,8 +49,6 @@ set visualbell
 set number
 " show ruler
 set ruler
-" always show status line
-set laststatus=2
 " show typed commands
 set showcmd
 " no swap file
@@ -50,15 +66,21 @@ set smartcase
 
 set nohidden
 
+" powerline
+set rtp+=$HOME/.local/lib/python3.6/site-packages/powerline/bindings/vim/
+" always show status line
+set laststatus=2
+
 " use clipboard without pbcopy
 set clipboard^=unnamed
 set clipboard^=unnamedplus
 
-set statusline=%F%m%r%h%w\ [type=%y\ %{&ff}]\ \[buff=%n]\ [%l/%L\,%c]\ (%p%%)\  
+"set statusline=%F%m%r%h%w\ [type=%y\ %{&ff}]\ \[buff=%n]\ [%l/%L\,%c]\ (%p%%)\  
 
 autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=8 shiftwidth=8
 autocmd BufNewFile,BufRead *.js setlocal noexpandtab tabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead *.yml setlocal expandtab tabstop=2 shiftwidth=2
+autocmd BufNewFile,BufRead *.ex,*.exs setlocal expandtab tabstop=2 shiftwidth=2
 
 au BufNewFile,BufRead *.py
     \ set tabstop=4
@@ -93,6 +115,8 @@ vnoremap <BS> d
 " solarized
 "----------------------------------------------
 syntax enable
+let g:solarized_termcolors=16
+set t_Co=16 
 set background=dark
 colorscheme solarized
 
@@ -185,6 +209,11 @@ vnoremap <leader>wv :vsplit<cr>
 " map <leader>wh to :split<cr>
 nnoremap <leader>ws :split<cr>
 vnoremap <leader>ws :split<cr>
+" map arrow keys to resize windows
+nnoremap <Up>    :resize +1<CR>
+nnoremap <Down>  :resize -1<CR>
+nnoremap <Left>  :vertical resize +1<CR>
+nnoremap <Right> :vertical resize -1<CR>
 
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in.
@@ -227,7 +256,7 @@ nnoremap <leader>bw :bwipe
 "--------------------------------------------------------------
 " fugitive
 "--------------------------------------------------------------
-set statusline+=%{fugitive#statusline()}\ 
+"set statusline+=%{fugitive#statusline()}\ 
 "--------------------------------------------------------------
 " ctrlp
 "--------------------------------------------------------------
@@ -318,9 +347,9 @@ nnoremap <leader>cc :cclose<cr>
 "------------------------------------------------------------------------------
 " ale
 "------------------------------------------------------------------------------
-set statusline+=%#warningmsg#
-set statusline+=%{ALEGetStatusLine()}
-set statusline+=%*
+"set statusline+=%#warningmsg#
+"set statusline+=%{ALEGetStatusLine()}
+"set statusline+=%*
 let g:ale_javascript_eslint_use_global = 1
 let g:ale_linters = {
 \   'javascript': ['eslint'],
@@ -382,6 +411,7 @@ if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
 let g:neocomplete#sources#omni#input_patterns.go = '[^.[:digit:] *\t]\.\w*'
+let g:neocomplete#sources#omni#input_patterns.elixir = '[^.[:digit:] *\t]\.'
 "let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
 "if !exists('g:neocomplete#force_omni_input_patterns')
 "  let g:neocomplete#force_omni_input_patterns = {}

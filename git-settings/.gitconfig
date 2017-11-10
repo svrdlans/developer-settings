@@ -2,92 +2,89 @@
 	name = Srđan Svrdlan
 	email = srdjan.svrdlan@gmail.com
 [core]
-	autocrlf = true
-	excludesfile = C:\\Users\\s.svrdlan\\Documents\\gitignore_global.txt
 	preloadindex = true
 	fscache = true
 	pager = less
+	editor = vim
 [push]
 	default = simple
 [diff]
-	tool = kdiff3
-[difftool "kdiff3"]
-	cmd = 'C:/Program Files/KDiff3/kdiff3.exe' \"$LOCAL\" \"$REMOTE\"
+	tool = vimdiff
 [merge]
-	tool = kdiff3
-[mergetool "kdiff3"]
-	trustExitCode = false
-	keepBackup = false
-	cmd = 'C:/Program Files/KDiff3/kdiff3.exe' \"$BASE\" \"$LOCAL\" \"$REMOTE\" -o \"$MERGED\"
+	tool = vimdiff
+	conflictstyle = diff3
+	prompt = false
 [color]
 	ui = auto
 [alias]
 	ru = remote update
 	f = fetch
-	coma = commit --amend
+	cam = commit --amend -C HEAD
+	coam = commit --amend
 	mr = merge
 	co = checkout
 	com = checkout master
 	cod = checkout develop
-	fc = "!f() { git checkout feature/CORE-$1; }; f"
-	fi = "!f() { git checkout feature/ITA-$1; }; f"
-	fm = "!f() { git checkout feature/MAL-$1; }; f"
-	fa = "!f() { git checkout feature/AI-$1; }; f"
-	ha = "!f() { git checkout hotfix/AI-$1; }; f"
-	hc = "!f() { git checkout hotfix/CORE-$1; }; f"
-	hi = "!f() { git checkout hotfix/ITA-$1; }; f"
-	hm = "!f() { git checkout hotfix/MAL-$1; }; f"
-	rel = "!f() { git checkout release/16.07.01; }; f"
-	mfc = "!f() { git merge feature/CORE-$1; }; f"
-	mfi = "!f() { git merge feature/ITA-$1; }; f"
-	mfm = "!f() { git merge feature/MAL-$1; }; f"
-	mfa = "!f() { git merge feature/AI-$1; }; f"
-	mhc = "!f() { git merge hotfix/CORE-$1; }; f"
-	mhi = "!f() { git merge hotfix/ITA-$1; }; f"
-	mha = "!f() { git merge hotfix/AI-$1; }; f"
-	mhot = "!f() { git merge hotfix/$1; }; f"
-	mfea = "!f() { git merge feature/$1; }; f"
+	# fc = "!f() { git checkout feature/CORE-$1; }; f"
+	# fi = "!f() { git checkout feature/ITA-$1; }; f"
+	# fm = "!f() { git checkout feature/MAL-$1; }; f"
+	# fa = "!f() { git checkout feature/AI-$1; }; f"
+	# ha = "!f() { git checkout hotfix/AI-$1; }; f"
+	# hc = "!f() { git checkout hotfix/CORE-$1; }; f"
+	# hi = "!f() { git checkout hotfix/ITA-$1; }; f"
+	# hm = "!f() { git checkout hotfix/MAL-$1; }; f"
+	# rel = "!f() { git checkout release/16.07.01; }; f"
+	# mfc = "!f() { git merge feature/CORE-$1; }; f"
+	# mfi = "!f() { git merge feature/ITA-$1; }; f"
+	# mfm = "!f() { git merge feature/MAL-$1; }; f"
+	# mfa = "!f() { git merge feature/AI-$1; }; f"
+	# mhc = "!f() { git merge hotfix/CORE-$1; }; f"
+	# mhi = "!f() { git merge hotfix/ITA-$1; }; f"
+	# mha = "!f() { git merge hotfix/AI-$1; }; f"
+	# mhot = "!f() { git merge hotfix/$1; }; f"
+	# mfea = "!f() { git merge feature/$1; }; f"
 	st = status
 	br = branch
 	pur = pull --rebase
 	pu = pull
 	hist = log --pretty=format:'%h %ad [%an] | %s%d' --color --graph --date=short
 	lol = log --oneline --abbrev-commit --graph --decorate
+	lom = log --oneline --abbrev-commit --graph --decorate --format='[%an]-%ad | %C(Yellow)%h%Creset %Cgreen%s%Creset%n' --date=short
 	psu = push -u origin
 	ps = push
 	pso = push origin
-	resfc = "!f() { git reset --hard origin/feature/CORE-$1; }; f"
-	resfi = "!f() { git reset --hard origin/feature/ITA-$1; }; f"
-	resfm = "!f() { git reset --hard origin/feature/MAL-$1; }; f"
-	resfa = "!f() { git reset --hard origin/feature/AI-$1; }; f"
-	reshc = "!f() { git reset --hard origin/hotfix/CORE-$1; }; f"
-	reshi = "!f() { git reset --hard origin/hotfix/ITA-$1; }; f"
-	reshm = "!f() { git reset --hard origin/hotfix/MAL-$1; }; f"
-	resha = "!f() { git reset --hard origin/hotfix/AI-$1; }; f"
-	reshot = "!f() { git reset --hard origin/hotfix/$1; }; f"
-	resfea = "!f() { git reset --hard origin/feature/$1; }; f"
+	# resfc = "!f() { git reset --hard origin/feature/CORE-$1; }; f"
+	# resfi = "!f() { git reset --hard origin/feature/ITA-$1; }; f"
+	# resfm = "!f() { git reset --hard origin/feature/MAL-$1; }; f"
+	# resfa = "!f() { git reset --hard origin/feature/AI-$1; }; f"
+	# reshc = "!f() { git reset --hard origin/hotfix/CORE-$1; }; f"
+	# reshi = "!f() { git reset --hard origin/hotfix/ITA-$1; }; f"
+	# reshm = "!f() { git reset --hard origin/hotfix/MAL-$1; }; f"
+	# resha = "!f() { git reset --hard origin/hotfix/AI-$1; }; f"
+	# reshot = "!f() { git reset --hard origin/hotfix/$1; }; f"
+	# resfea = "!f() { git reset --hard origin/feature/$1; }; f"
 	rebd = rebase develop
 	rebm = rebase master
 	haut = "! for branch in `git branch --merged master -r *hotfix* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
 	faut = "! for branch in `git branch --merged master -r *feature* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
 	fautnm = "! for branch in `git branch --no-merged master -r *feature* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
 	hautnm = "! for branch in `git branch --no-merged master -r *hotfix* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
-	delfc = "!f() { git branch -d feature/CORE-$1; }; f"
-	delfi = "!f() { git branch -d feature/ITA-$1; }; f"
-	delhc = "!f() { git branch -d hotfix/CORE-$1; }; f"
-	delhi = "!f() { git branch -d hotfix/ITA-$1; }; f"
-	delfm = "!f() { git branch -d feature/MAL-$1; }; f"
-	delhm = "!f() { git branch -d hotfix/MAL-$1; }; f"
-	delfa = "!f() { git branch -d feature/AI-$1; }; f"
-	delha = "!f() { git branch -d hotfix/AI-$1; }; f"
-	delhot = "!f() { git branch -d hotfix/$1; }; f"
-	delfea = "!f() { git branch -d feature/$1; }; f"
-	delrfc = "!f() { git pso --delete feature/CORE-$1; }; f"
-	delrfi = "!f() { git pso --delete feature/ITA-$1; }; f"
-	delrhc = "!f() { git pso --delete hotfix/CORE-$1; }; f"
-	delrhi = "!f() { git pso --delete hotfix/ITA-$1; }; f"
-	delrfm = "!f() { git pso --delete feature/MAL-$1; }; f"
-	delrhm = "!f() { git pso --delete hotfix/MAL-$1; }; f"
-	delrfa = "!f() { git pso --delete feature/AI-$1; }; f"
-	delrha = "!f() { git pso --delete hotfix/AI-$1; }; f"
-	clweb = "!f() { git clean -f -- ISolutions/ISBets/Web/ISBetsWeb/ISBets/Content/*; git clean -f --  ISolutions/ISBets/Web/ISBetsWeb/ISBets/ControlsSkin/*; }; f" 
+	# delfc = "!f() { git branch -d feature/CORE-$1; }; f"
+	# delfi = "!f() { git branch -d feature/ITA-$1; }; f"
+	# delhc = "!f() { git branch -d hotfix/CORE-$1; }; f"
+	# delhi = "!f() { git branch -d hotfix/ITA-$1; }; f"
+	# delfm = "!f() { git branch -d feature/MAL-$1; }; f"
+	# delhm = "!f() { git branch -d hotfix/MAL-$1; }; f"
+	# delfa = "!f() { git branch -d feature/AI-$1; }; f"
+	# delha = "!f() { git branch -d hotfix/AI-$1; }; f"
+	# delhot = "!f() { git branch -d hotfix/$1; }; f"
+	# delfea = "!f() { git branch -d feature/$1; }; f"
+	# delrfc = "!f() { git pso --delete feature/CORE-$1; }; f"
+	# delrfi = "!f() { git pso --delete feature/ITA-$1; }; f"
+	# delrhc = "!f() { git pso --delete hotfix/CORE-$1; }; f"
+	# delrhi = "!f() { git pso --delete hotfix/ITA-$1; }; f"
+	# delrfm = "!f() { git pso --delete feature/MAL-$1; }; f"
+	# delrhm = "!f() { git pso --delete hotfix/MAL-$1; }; f"
+	# delrfa = "!f() { git pso --delete feature/AI-$1; }; f"
+	# delrha = "!f() { git pso --delete hotfix/AI-$1; }; f"
+	# clweb = "!f() { git clean -f -- ISolutions/ISBets/Web/ISBetsWeb/ISBets/Content/*; git clean -f --  ISolutions/ISBets/Web/ISBetsWeb/ISBets/ControlsSkin/*; }; f" 
