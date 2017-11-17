@@ -10,7 +10,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'fatih/vim-go'
 
 " Elixir plugins
-  Plug 'elixir-lang/vim-elixir'
+  Plug 'elixir-editors/vim-elixir'
   Plug 'avdgaag/vim-phoenix' 
 
 " Fuzzy file search
@@ -81,15 +81,17 @@ autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=8 shiftwidth=8
 autocmd BufNewFile,BufRead *.js setlocal noexpandtab tabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead *.yml setlocal expandtab tabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead *.ex,*.exs setlocal expandtab tabstop=2 shiftwidth=2
+autocmd BufNewFile,BufRead *.sh setlocal expandtab tabstop=4 shiftwidth=4
+
 
 au BufNewFile,BufRead *.py
-    \ set tabstop=4
-    \ set softtabstop=4
-    \ set shiftwidth=4
-    \ set textwidth=79
-    \ set expandtab
-    \ set autoindent
-    \ set fileformat=unix
+\ set tabstop=4
+\ set softtabstop=4
+\ set shiftwidth=4
+\ set textwidth=79
+\ set expandtab
+\ set autoindent
+\ set fileformat=unix
 
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
@@ -210,10 +212,10 @@ vnoremap <leader>wv :vsplit<cr>
 nnoremap <leader>ws :split<cr>
 vnoremap <leader>ws :split<cr>
 " map arrow keys to resize windows
-nnoremap <Up>    :resize +1<CR>
-nnoremap <Down>  :resize -1<CR>
-nnoremap <Left>  :vertical resize +1<CR>
-nnoremap <Right> :vertical resize -1<CR>
+nnoremap <Up>    :resize +1<cr>
+nnoremap <Down>  :resize -1<cr>
+nnoremap <Left>  :vertical resize +1<cr>
+nnoremap <Right> :vertical resize -1<cr>
 
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in.
@@ -235,18 +237,24 @@ map <leader>p "+gP
 " list buffers
 nnoremap <leader>bl :ls!<cr>
 " open buffer by number
-nnoremap <Leader>1 :1b<CR>
-nnoremap <Leader>2 :2b<CR>
-nnoremap <Leader>3 :3b<CR>
-nnoremap <Leader>4 :4b<CR>
-nnoremap <Leader>5 :5b<CR>
-nnoremap <Leader>6 :6b<CR>
-nnoremap <Leader>7 :7b<CR>
-nnoremap <Leader>8 :8b<CR>
-nnoremap <Leader>9 :9b<CR>
-nnoremap <Leader>0 :10b<CR>
+nnoremap <leader>1 :1b<cr>
+nnoremap <leader>2 :2b<cr>
+nnoremap <leader>3 :3b<cr>
+nnoremap <leader>4 :4b<cr>
+nnoremap <leader>5 :5b<cr>
+nnoremap <leader>6 :6b<cr>
+nnoremap <leader>7 :7b<cr>
+nnoremap <leader>8 :8b<cr>
+nnoremap <leader>9 :9b<cr>
+nnoremap <leader>0 :10b<cr>
 nnoremap <leader>bw :bwipe 
 
+
+"--------------------------------------------------------------
+" FORMAT
+"--------------------------------------------------------------
+" format indentation
+nnoremap <leader>fo :call Indent()<cr>
 
 
 "--------------------------------------------------------------
@@ -261,60 +269,60 @@ nnoremap <leader>bw :bwipe
 " ctrlp
 "--------------------------------------------------------------
 let g:ctrlp_max_files = 2000
-nnoremap <C-b> :CtrlPBuffer<CR> 
+nnoremap <C-b> :CtrlPBuffer<cr> 
 
 
 "---------------------------------------------
 " vim-go
 "---------------------------------------------
-let g:go_fmt_fail_silently = 1
-let g:go_fmt_command = "goimports"
-let g:go_autodetect_gopath = 1
-let g:go_list_type = "quickfix"
-let g:go_auto_type_info = 0
-let g:go_echo_command_info= 0
-
-let g:go_highlight_space_tab_error = 0
-let g:go_highlight_array_whitespace_error = 0
-let g:go_highlight_trailing_whitespace_error = 0
-let g:go_highlight_extra_types = 0
-let g:go_highlight_build_constraints = 1
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_auto_sameids = 0
-
-nmap <C-g> :GoDecls<cr>
-nnoremap <silent> <leader>fd :GoSameIds<cr>
-nnoremap <silent> <leader>ff :GoSameIdsClear<cr>
-nnoremap <silent> <leader>fr :GoReferrers<cr>
-nnoremap <leader>rn :GoRename<space>
-nnoremap <leader>fi :GoImpl<cr>
-
-augroup go
-  autocmd!
-
-  autocmd FileType go nmap <silent> <leader>gv <Plug>(go-def-vertical)
-  autocmd FileType go nmap <silent> <leader>gs <Plug>(go-def-split)
-
-  autocmd FileType go nmap <silent> <leader>gi <Plug>(go-info)
-  autocmd FileType go nmap <silent> <leader>gl <Plug>(go-metalinter)
-
-  autocmd FileType go nmap <silent> <leader>gb <Plug>(go-build)
-  autocmd FileType go nmap <silent> <leader>gt <Plug>(go-test)
-  autocmd FileType go nmap <silent> <leader>gr <Plug>(go-run)
-  autocmd FileType go nmap <silent> <leader>ge <Plug>(go-install)
-
-  autocmd FileType go nmap <silent> <leader>gd <Plug>(go-doc)
-  autocmd FileType go nmap <silent> <leader>gc <Plug>(go-coverage-toggle)
-  
-  " I like these more!
-  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
-  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
-augroup ENog
+"let g:go_fmt_fail_silently = 1
+"let g:go_fmt_command = "goimports"
+"let g:go_autodetect_gopath = 1
+"let g:go_list_type = "quickfix"
+"let g:go_auto_type_info = 0
+"let g:go_echo_command_info= 0
+"
+"let g:go_highlight_space_tab_error = 0
+"let g:go_highlight_array_whitespace_error = 0
+"let g:go_highlight_trailing_whitespace_error = 0
+"let g:go_highlight_extra_types = 0
+"let g:go_highlight_build_constraints = 1
+"let g:go_highlight_types = 1
+"let g:go_highlight_fields = 1
+"let g:go_highlight_functions = 1
+"let g:go_highlight_methods = 1
+"let g:go_auto_sameids = 0
+"
+"nmap <C-g> :GoDecls<cr>
+"nnoremap <silent> <leader>fd :GoSameIds<cr>
+"nnoremap <silent> <leader>ff :GoSameIdsClear<cr>
+"nnoremap <silent> <leader>fr :GoReferrers<cr>
+"nnoremap <leader>rn :GoRename<space>
+"nnoremap <leader>fi :GoImpl<cr>
+"
+"augroup go
+"  autocmd!
+"
+"  autocmd FileType go nmap <silent> <leader>gv <Plug>(go-def-vertical)
+"  autocmd FileType go nmap <silent> <leader>gs <Plug>(go-def-split)
+"
+"  autocmd FileType go nmap <silent> <leader>gi <Plug>(go-info)
+"  autocmd FileType go nmap <silent> <leader>gl <Plug>(go-metalinter)
+"
+"  autocmd FileType go nmap <silent> <leader>gb <Plug>(go-build)
+"  autocmd FileType go nmap <silent> <leader>gt <Plug>(go-test)
+"  autocmd FileType go nmap <silent> <leader>gr <Plug>(go-run)
+"  autocmd FileType go nmap <silent> <leader>ge <Plug>(go-install)
+"
+"  autocmd FileType go nmap <silent> <leader>gd <Plug>(go-doc)
+"  autocmd FileType go nmap <silent> <leader>gc <Plug>(go-coverage-toggle)
+"  
+"  " I like these more!
+"  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+"  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+"  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+"  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+"augroup ENog
 
 "------------------------------------------------------------------------------
 " Syntastic
@@ -430,7 +438,38 @@ let g:neoformat_try_formatprg = 1
 nnoremap <c-f> :Neoformat prettier<cr>
 
 
+" Restore cursor position, window position, and last search after running a
+" command.
+function! Preserve(command)
+  " Save the last search.
+  let search = @/
 
+  " Save the current cursor position.
+  let cursor_position = getpos('.')
+
+  " Save the current window position.
+  normal! H
+  let window_position = getpos('.')
+  call setpos('.', cursor_position)
+
+  " Execute the command.
+  execute a:command
+
+  " Restore the last search.
+  let @/ = search
+
+  " Restore the previous window position.
+  call setpos('.', window_position)
+  normal! zt
+
+  " Restore the previous cursor position.
+  call setpos('.', cursor_position)
+endfunction
+
+" Re-indent the whole buffer.
+function! Indent()
+  call Preserve('normal gg=G')
+endfunction
 
 " define function to modify tab label by adding '+' if buffer has changes
 function! GuiTabLabel()
