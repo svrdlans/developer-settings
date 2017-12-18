@@ -19,6 +19,8 @@ call plug#begin('~/.vim/plugged')
 " Directory browsing 
   Plug 'tpope/vim-vinegar'
  
+" Powerline
+  Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 
   Plug 'Shougo/neocomplete.vim'
   Plug 'Raimondi/delimitMate'
@@ -66,11 +68,6 @@ set smartcase
 
 set nohidden
 
-" powerline
-set rtp+=$HOME/.local/lib/python3.6/site-packages/powerline/bindings/vim/
-" always show status line
-set laststatus=2
-
 " use clipboard without pbcopy
 set clipboard^=unnamed
 set clipboard^=unnamedplus
@@ -83,15 +80,14 @@ autocmd BufNewFile,BufRead *.yml setlocal expandtab tabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead *.ex,*.exs setlocal expandtab tabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead *.sh setlocal expandtab tabstop=4 shiftwidth=4
 
-
 au BufNewFile,BufRead *.py
-\ set tabstop=4
-\ set softtabstop=4
-\ set shiftwidth=4
-\ set textwidth=79
-\ set expandtab
-\ set autoindent
-\ set fileformat=unix
+	\ set tabstop=4
+	\ set softtabstop=4
+	\ set shiftwidth=4
+	\ set textwidth=79
+	\ set expandtab
+	\ set autoindent
+	\ set fileformat=unix
 
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
@@ -117,10 +113,13 @@ vnoremap <BS> d
 " solarized
 "----------------------------------------------
 syntax enable
-let g:solarized_termcolors=16
-set t_Co=16 
 set background=dark
 colorscheme solarized
+
+" powerline
+" set rtp+=/Library/Python/2.7/site-packages/powerline/bindings/vim/
+" always show status line
+set laststatus=2
 
 
 "----------------------------------------------
@@ -269,6 +268,11 @@ nnoremap <leader>fo :call Indent()<cr>
 " ctrlp
 "--------------------------------------------------------------
 let g:ctrlp_max_files = 2000
+let g:ctrlp_working_path_mode = 'a'
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\.git$\|_build$\|cover$\|deps$\|doc$\|ESData$',
+    \ 'file': '\.dump\|\.(exe|so|dll|ez)$'
+    \ }
 nnoremap <C-b> :CtrlPBuffer<cr> 
 
 
