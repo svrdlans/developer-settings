@@ -15,6 +15,8 @@ call plug#begin('~/.vim/plugged')
 
 " Fuzzy file search
   Plug 'ctrlpvim/ctrlp.vim'
+" Search by content
+  Plug 'mileszs/ack.vim'
 
 " Directory browsing 
   Plug 'tpope/vim-vinegar'
@@ -275,6 +277,12 @@ let g:ctrlp_custom_ignore = {
     \ }
 nnoremap <C-b> :CtrlPBuffer<cr> 
 
+"--------------------------------------------------------------
+" ack
+"--------------------------------------------------------------
+map <leader>u :Ack <C-R><C-W> --ignore-dir vendor --ignore-dir coverage --ignore-dir log<CR><CR>
+map <leader>U :ccl<CR>
+
 
 "---------------------------------------------
 " vim-go
@@ -441,6 +449,11 @@ let g:neoformat_try_formatprg = 1
 " map Ctrl-F to format js code
 nnoremap <c-f> :Neoformat prettier<cr>
 
+"-------------------------------
+" project helpers
+"-------------------------------
+" search and replace logger text with anonymous function 
+nnoremap <leader>sl :%s/Logger\.\(debug\|info\|warn\|error\) \(".\+"\)/Logger\.\1 fn -> \2 end/gc<cr>
 
 " Restore cursor position, window position, and last search after running a
 " command.
