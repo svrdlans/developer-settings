@@ -123,7 +123,6 @@ colorscheme solarized
 " always show status line
 set laststatus=2
 
-
 "----------------------------------------------
 " MAPPINGS
 "----------------------------------------------
@@ -370,10 +369,10 @@ nnoremap <leader>cc :cclose<cr>
 "set statusline+=%#warningmsg#
 "set statusline+=%{ALEGetStatusLine()}
 "set statusline+=%*
-let g:ale_javascript_eslint_use_global = 1
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\}
+"let g:ale_javascript_eslint_use_global = 1
+"let g:ale_linters = {
+"\   'javascript': ['eslint'],
+"\}
 
 
 "------------------------------------------------------------------------------
@@ -453,7 +452,7 @@ nnoremap <c-f> :Neoformat prettier<cr>
 " project helpers
 "-------------------------------
 " search and replace logger text with anonymous function 
-nnoremap <leader>sl :%s/Logger\.\(debug\|info\|warn\|error\) \(".\+"\)/Logger\.\1 fn -> \2 end/gc<cr>
+nnoremap <leader>sl :%s/Logger\.\(debug\\|info\\|warn\\|error\) \(".\+"\)/Logger\.\1 fn -> \2 end/gc<cr>
 
 " Restore cursor position, window position, and last search after running a
 " command.
