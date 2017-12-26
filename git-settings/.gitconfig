@@ -21,10 +21,12 @@
 	f = fetch
 	cam = commit --amend -C HEAD
 	coam = commit --amend
+	comm = commit -m 
 	mr = merge
+	mrn = merge --no-ff
 	co = checkout
 	com = checkout master
-	cod = checkout develop
+	cod = checkout dev
 	# fc = "!f() { git checkout feature/CORE-$1; }; f"
 	# fi = "!f() { git checkout feature/ITA-$1; }; f"
 	# fm = "!f() { git checkout feature/MAL-$1; }; f"
@@ -63,12 +65,14 @@
 	# resha = "!f() { git reset --hard origin/hotfix/AI-$1; }; f"
 	# reshot = "!f() { git reset --hard origin/hotfix/$1; }; f"
 	# resfea = "!f() { git reset --hard origin/feature/$1; }; f"
-	rebd = rebase develop
+	rebd = rebase dev
 	rebm = rebase master
 	haut = "! for branch in `git branch --merged master -r *hotfix* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
 	faut = "! for branch in `git branch --merged master -r *feature* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
 	fautnm = "! for branch in `git branch --no-merged master -r *feature* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
 	hautnm = "! for branch in `git branch --no-merged master -r *hotfix* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
+	del = "!f() { git branch -d $1; }; f"
+	delr = "!f() { git pso --delete $1; }; f"
 	# delfc = "!f() { git branch -d feature/CORE-$1; }; f"
 	# delfi = "!f() { git branch -d feature/ITA-$1; }; f"
 	# delhc = "!f() { git branch -d hotfix/CORE-$1; }; f"
