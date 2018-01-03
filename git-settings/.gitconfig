@@ -49,7 +49,7 @@
 	br = branch
 	pur = pull --rebase
 	pu = pull
-	hist = log --pretty=format:'%h %ad [%an] | %s%d' --color --graph --date=local
+	hist = log --pretty=format:'%h %ad [%an] | %s%d' --color --graph --date=format-local:'%Y-%m-%d %H:%M:%S'
 	lol = log --oneline --abbrev-commit --graph --decorate
 	lom = log --oneline --abbrev-commit --graph --decorate --format='[%an]-%ad | %C(Yellow)%h%Creset %Cgreen%s%Creset%n' --date=short
 	psu = push -u origin
