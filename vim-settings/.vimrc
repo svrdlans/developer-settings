@@ -1,13 +1,13 @@
-" disable indentation
-filetype plugin indent off
-
 " set nocompatibility mode
 set nocompatible
+
+" disable indentation
+filetype plugin indent off
 
 " define plugins
 call plug#begin('~/.vim/plugged')
 " Go plugins
-  Plug 'fatih/vim-go'
+" Plug 'fatih/vim-go'
 
 " Elixir plugins
   Plug 'elixir-editors/vim-elixir'
@@ -19,7 +19,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'mileszs/ack.vim'
 
 " Directory browsing 
-  Plug 'tpope/vim-vinegar'
+" Plug 'tpope/vim-vinegar'
  
 " Powerline
   Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
@@ -35,13 +35,13 @@ call plug#begin('~/.vim/plugged')
   Plug 'altercation/vim-colors-solarized' 
 "  Plug 'danilo-augusto/vim-afterglow'
   "Plug 'fatih/molokai'
-  
-  Plug 'w0rp/ale'
+
+""  Plug 'w0rp/ale'
   
 " Javascript plugins
-  Plug 'pangloss/vim-javascript'
-  Plug 'sbdchd/neoformat'
-  Plug 'prettier/prettier'
+"  Plug 'pangloss/vim-javascript'
+"  Plug 'sbdchd/neoformat'
+"  Plug 'prettier/prettier'
 call plug#end()
 
 " enable filetype plugins
@@ -63,12 +63,24 @@ set nobackup
 set nocursorcolumn
 " set completion window max size
 set pumheight=10
+set tabstop=4     " a tab is four space
+set autoindent    " always set autoindenting on
+set copyindent    " copy the previous indentation on autoindenting
+set shiftwidth=4  " number of spaces to use for autoindenting
+set shiftround    " use multiple of shiftwidth when indenting with '<' and '>'
 " don't wrap lines
 set nowrap
 set ignorecase
 set smartcase
-
-set nohidden
+set hlsearch 	" highlight found search patterns
+set incsearch	" highlight pattern while typing
+set showmatch 	" set show matching parenthesis
+set title		" change the terminal's title
+set lazyredraw          " don't update the display while executing macros
+set switchbuf=useopen	" reveal already opened files from the
+set hidden
+set scrolljump=5
+set scrolloff=10
 
 " use clipboard without pbcopy
 set clipboard^=unnamed
@@ -79,24 +91,20 @@ set clipboard^=unnamedplus
 autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=8 shiftwidth=8
 autocmd BufNewFile,BufRead *.js setlocal noexpandtab tabstop=2 shiftwidth=2
 autocmd BufNewFile,BufRead *.yml setlocal expandtab tabstop=2 shiftwidth=2
-autocmd BufNewFile,BufRead *.ex,*.exs setlocal expandtab tabstop=2 shiftwidth=2
-autocmd BufNewFile,BufRead *.sh setlocal expandtab tabstop=4 shiftwidth=4
+autocmd BufNewFile,BufRead *.sh setlocal expandtab tabstop=2 shiftwidth=2
+
+autocmd BufNewFile,BufRead *.ex,*.exs setlocal expandtab tabstop=2 shiftwidth=2 autoindent copyindent
 
 au BufNewFile,BufRead *.py
-	\ set tabstop=4
-	\ set softtabstop=4
-	\ set shiftwidth=4
-	\ set textwidth=79
-	\ set expandtab
-	\ set autoindent
-	\ set fileformat=unix
+	\ setlocal tabstop=4
+	\ setlocal softtabstop=4
+	\ setlocal shiftwidth=4
+	\ setlocal textwidth=79
+	\ setlocal expandtab
+	\ setlocal autoindent
+	\ setlocal fileformat=unix
 
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
-
-" highlight found search patterns
-set hlsearch
-" highlight pattern while typing
-set incsearch
 
 " from mswin.vim: backspace and cursor keys wrap to previous/next line
 set backspace=indent,eol,start whichwrap+=<,>,[,]
@@ -114,9 +122,12 @@ vnoremap <BS> d
 "----------------------------------------------
 " solarized
 "----------------------------------------------
-syntax enable
+syntax on
+set t_Co=256
 set background=dark
 colorscheme solarized
+set cursorline
+hi CursorLine cterm=underline ctermbg=bg
 
 " powerline
 " set rtp+=/Library/Python/2.7/site-packages/powerline/bindings/vim/
@@ -129,14 +140,18 @@ set laststatus=2
 " map <leader> key to comma
 let mapleader=","
 
+nnoremap <silent> <leader>h :set cursorline!<cr>
+
 " map <leader><Space> to clear highlights after search
 nnoremap <silent> <leader><Space> :noh<cr>
 " map <leader>t to toggle case of word under cursor
 nnoremap <f3> gUiw<esc>
 nnoremap <F4> guiw<esc>
 
-" map <leader>so to reload .vimrc files
-nnoremap <leader>sov :so $MYVIMRC<cr>
+" map <leader>ev to edit .vimrc files
+nnoremap <leader>ev :e $MYVIMRC<cr>
+" map <leader>sv to reload .vimrc files
+nnoremap <leader>sv :so $MYVIMRC<cr>
 
 " <--- DIRECTORY LISTING CONFIGURATION ---
 " set directory listing to use tree view
@@ -223,13 +238,18 @@ nnoremap n nzzzv
 nnoremap N Nzzzv
 
 " <leader>x is Cut to clipboard
-vnoremap <leader>x "+x
+"vnoremap <leader>x "+x
 
 " <leader>y is Copy to clipboard
 vnoremap <leader>y "+y
 
+vnoremap <leader>/ I"<esc>
+nnoremap <leader>/ I"
+
 " <leader>y is Paste from clipboard
 map <leader>p "+gP
+" toggle paste mode
+set pastetoggle=<f2>
 
 "--------------------------------------------------------------
 " BUFFERS
@@ -333,7 +353,7 @@ map <leader>U :ccl<CR>
 "  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
 "  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
 "  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
-"augroup ENog
+"augroup END
 
 "------------------------------------------------------------------------------
 " Syntastic
@@ -437,6 +457,18 @@ let g:neocomplete#sources#omni#input_patterns.elixir = '[^.[:digit:] *\t]\.'
 "endif
 "let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
 
+"---------------------------------------------
+" elixir
+"---------------------------------------------
+nnoremap <leader>m :w\|:!iex -S mix<cr>
+augroup ex
+	autocmd!
+
+	autocmd FileType elixir vnoremap <buffer> <leader>/ I#<esc>
+	autocmd FileType elixir nnoremap <buffer> <leader>/ I#
+	autocmd FileType elixir setlocal foldmethod=syntax foldlevel=1 foldminlines=2	" use folding from syntax
+	autocmd FileType elixir nnoremap <Space> za
+augroup END
 
 "---------------------------------------------
 " prettier
@@ -453,6 +485,10 @@ nnoremap <c-f> :Neoformat prettier<cr>
 "-------------------------------
 " search and replace logger text with anonymous function 
 nnoremap <leader>sl :%s/Logger\.\(debug\\|info\\|warn\\|error\) \(".\+"\)/Logger\.\1 fn -> \2 end/gc<cr>
+" search and replace word under cursor - current line
+nnoremap <leader>sc :s/<c-r><c-w>//g<left><left>
+" search and replace word under cursor - all lines
+nnoremap <leader>sa :%s/<c-r><c-w>//gc<left><left><left>
 
 " Restore cursor position, window position, and last search after running a
 " command.
