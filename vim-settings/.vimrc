@@ -88,12 +88,20 @@ set clipboard^=unnamedplus
 
 "set statusline=%F%m%r%h%w\ [type=%y\ %{&ff}]\ \[buff=%n]\ [%l/%L\,%c]\ (%p%%)\  
 
-autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=8 shiftwidth=8
-autocmd BufNewFile,BufRead *.js setlocal noexpandtab tabstop=2 shiftwidth=2
-autocmd BufNewFile,BufRead *.yml setlocal expandtab tabstop=2 shiftwidth=2
-autocmd BufNewFile,BufRead *.sh setlocal expandtab tabstop=2 shiftwidth=2
+let b:comment_leader='" ' 	" define comment leader
 
-autocmd BufNewFile,BufRead *.ex,*.exs setlocal expandtab tabstop=2 shiftwidth=2 autoindent copyindent
+autocmd BufNewFile,BufRead *.go
+	\ setlocal noexpandtab tabstop=8 shiftwidth=8
+	\ let b:comment_leader='// '
+autocmd BufNewFile,BufRead *.js
+	\ setlocal noexpandtab tabstop=2 shiftwidth=2
+	\ let b:comment_leader='// '
+autocmd BufNewFile,BufRead *.yml
+	\ setlocal expandtab tabstop=2 shiftwidth=2
+	\ let b:comment_leader='# '
+autocmd BufNewFile,BufRead *.sh
+	\ setlocal expandtab tabstop=2 shiftwidth=2
+	\ let b:comment_leader='# '
 
 au BufNewFile,BufRead *.py
 	\ setlocal tabstop=4
@@ -174,9 +182,11 @@ nnoremap <leader>le :15Lexplore<cr>
 " --- DIRECTORY LISTING CONFIGURATION --->
 
 
-" map <leader>q to :q<cr>
+" map <leader>q to :q or :Q<cr>
 nnoremap <leader>q :q<cr>
+nnoremap <leader>Q :q<cr>
 vnoremap <leader>q :q<cr>
+vnoremap <leader>Q :q<cr>
 
 " map <leader>tt to tabnew + Enter
 nnoremap <leader>tt :tabnew <cr>
@@ -243,8 +253,10 @@ nnoremap N Nzzzv
 " <leader>y is Copy to clipboard
 vnoremap <leader>y "+y
 
-vnoremap <leader>/ I"<esc>
-nnoremap <leader>/ I"
+" comment selection or current line
+map <leader>/ :s/^/<c-r>=escape(b:comment_leader,'\/')<cr>/<cr>:noh<cr>
+" uncomment selection or current line
+map <leader>' :s/^\V<c-r>=escape(b:comment_leader,'\/')<cr>//e<cr>:noh<cr>
 
 " <leader>y is Paste from clipboard
 map <leader>p "+gP
@@ -460,14 +472,15 @@ let g:neocomplete#sources#omni#input_patterns.elixir = '[^.[:digit:] *\t]\.'
 "---------------------------------------------
 " elixir
 "---------------------------------------------
-nnoremap <leader>m :w\|:!iex -S mix<cr>
 augroup ex
 	autocmd!
 
-	autocmd FileType elixir vnoremap <buffer> <leader>/ I#<esc>
-	autocmd FileType elixir nnoremap <buffer> <leader>/ I#
-	autocmd FileType elixir setlocal foldmethod=syntax foldlevel=1 foldminlines=2	" use folding from syntax
-	autocmd FileType elixir nnoremap <Space> za
+	au FileType elixir setlocal expandtab tabstop=2 shiftwidth=2 autoindent copyindent
+	au FileType elixir setlocal foldmethod=syntax foldlevel=1 foldminlines=2	" use folding from syntax
+	au FileType elixir let b:comment_leader='# '
+	
+	au FileType elixir nnoremap <leader>m :w\|:!iex -S mix<cr>
+	au FileType elixir nnoremap <Space> za
 augroup END
 
 "---------------------------------------------
