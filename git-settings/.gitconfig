@@ -1,11 +1,11 @@
 [user]
 	name = Srđan Svrdlan
-	email = srdjan.svrdlan@gmail.com
+	email = srdjan.svrdlan@vibe.rs
 [core]
 	preloadindex = true
 	fscache = true
 	pager = less
-	editor = vim
+	# editor = '/usr/local/Cellar/vim/8.0.1250/bin/vim'
 [push]
 	default = simple
 [diff]
@@ -27,6 +27,8 @@
 	co = checkout
 	com = checkout master
 	cod = checkout dev
+	di = diff
+	dic = diff --cached
 	# fc = "!f() { git checkout feature/CORE-$1; }; f"
 	# fi = "!f() { git checkout feature/ITA-$1; }; f"
 	# fm = "!f() { git checkout feature/MAL-$1; }; f"
@@ -44,14 +46,18 @@
 	# mhi = "!f() { git merge hotfix/ITA-$1; }; f"
 	# mha = "!f() { git merge hotfix/AI-$1; }; f"
 	# mhot = "!f() { git merge hotfix/$1; }; f"
-	# mfea = "!f() { git merge feature/$1; }; f"
+	mf = "!f() { git merge feature/$1; }; f"
 	st = status
 	br = branch
+	brm = branch --merged
+	bru = branch --no-merged
 	pur = pull --rebase
 	pu = pull
 	hist = log --pretty=format:'%h %ad [%an] | %s%d' --color --graph --date=format-local:'%Y-%m-%d %H:%M:%S'
 	lol = log --oneline --abbrev-commit --graph --decorate
 	lom = log --oneline --abbrev-commit --graph --decorate --format='[%an]-%ad | %C(Yellow)%h%Creset %Cgreen%s%Creset%n' --date=short
+	sh = show
+	sp = "!f() { git show HEAD~$1; }; f"
 	psu = push -u origin
 	ps = push
 	pso = push origin
