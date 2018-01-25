@@ -161,6 +161,14 @@ nnoremap <leader>ev :e $MYVIMRC<cr>
 " map <leader>sv to reload .vimrc files
 nnoremap <leader>sv :so $MYVIMRC<cr>
 
+" toggle syntax
+map <F7> :if exists("g:syntax_on") <bar>
+	\	syntax off <bar>
+	\ else <bar>
+	\   syntax on <bar>
+	\ 	hi CursorLine cterm=underline ctermbg=bg <bar>
+	\ endif <cr>
+
 " <--- DIRECTORY LISTING CONFIGURATION ---
 " set directory listing to use tree view
 let g:netrw_liststyle=3 
@@ -461,7 +469,7 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
-let g:neocomplete#sources#omni#input_patterns.go = '[^.[:digit:] *\t]\.\w*'
+"let g:neocomplete#sources#omni#input_patterns.go = '[^.[:digit:] *\t]\.\w*'
 let g:neocomplete#sources#omni#input_patterns.elixir = '[^.[:digit:] *\t]\.'
 "let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
 "if !exists('g:neocomplete#force_omni_input_patterns')
@@ -486,12 +494,12 @@ augroup END
 "---------------------------------------------
 " prettier
 "---------------------------------------------
-" set formatting program with args
-set formatprg=prettier\ --stdin\ --print-width\ 120\ --single-quote
-" use formatprg when available
-let g:neoformat_try_formatprg = 1
-" map Ctrl-F to format js code
-nnoremap <c-f> :Neoformat prettier<cr>
+"" set formatting program with args
+"set formatprg=prettier\ --stdin\ --print-width\ 120\ --single-quote
+"" use formatprg when available
+"let g:neoformat_try_formatprg = 1
+"" map Ctrl-F to format js code
+"nnoremap <c-f> :Neoformat prettier<cr>
 
 "-------------------------------
 " project helpers
