@@ -126,8 +126,7 @@ for al in `__git_aliases`; do
 	complete_func=_git_$(__git_aliased_command $al)
 	function_exists $complete_func && __git_complete g$al $complete_func
 done
-
-alias brml="gbrm | grep -oE 'FH-\d{4,}' | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'"
-alias brul="gbru | grep -oE 'FH-\d{4,}' | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'"
+alias brml="git branch --merged | grep -oE \"FH-\d{4,}\" | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'"
+alias brul="git branch --no-merged | grep -oE \"FH-\d{4,}\" | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'"
 #
 #

@@ -19,6 +19,9 @@
 [alias]
 	ru = remote update
 	f = fetch
+	a = add
+	aa = add .
+	ac = !git add --all && git commit -m
 	ca = commit --amend -C HEAD
 	cam = commit --amend
 	cm = commit -m 
@@ -53,8 +56,7 @@
 	br = branch
 	brm = branch --merged
 	bru = branch --no-merged
-	#brml = branch --merged | grep -oE "FH-\d{4,}" | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'
-	#brul = branch --no-merged | grep -oE "FH-\d{4,}" | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'
+ 	
     lh = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=format-local:'%Y-%m-%d %H:%M:%S' --graph
 	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
     ld = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short --graph
