@@ -48,31 +48,66 @@ function qpods() {
 	if [ $# -eq 0 ]; then
 		kubectl get pod
 	else
-		ctx="$1"
+		local ctx="$1"
 		kubectl get pod --context="gke_freight-hub_us-central1-c_fh-$ctx"
 	fi
+}
+
+function get_default_ctx() {
+	local valid_ctxs=(dev demo prod)
+	result=`qctx`
+	local ctx=${result##*-}
+	if ! [[ $result == *freight-hub* && ${valid_ctxs[@]} =~ $ctx ]]; then
+		ctx=dev
+	fi
+	echo $ctx
 }
 
 function qlog() {
 	valid_ctxs=(dev demo prod)
 	if [ $# -eq 1 ]; then
-		result=`qctx`
-		ctx=${result##*-}
-		if [[ $result == *freight-hub* && ${valid_ctxs[@]} =~ $ctx ]]; then
-			echo "Current context set to '$ctx'"
-		else
-			ctx=dev
-			echo "Current context not set; using 'dev'"
-		fi
+		ctx=`get_default_ctx`
+		echo "Current context set to '$ctx'"
+	elif [ $# -eq 2 ]; then
+		echo "Context passed as '$ctx'"
+		ctx=$2
 	else
-		ctx="$2"
+		echo "Usage: qlog POD [CTX [=(dev|demo|prod)]] "
+		echo -e "Example: qlog bo-listeners \t\t# stream complete log for bo-listener using current-context (if not set defaults to dev)"
+		echo -e "Example: qlog bo-listeners demo \t# stream complete log for bo-listeners for demo context"
+		return 1
 	fi
-	context=gke_freight-hub_us-central1-c_fh-$ctx
-	v="$1"
-	NAME=${v/_/-}
-	POD=`qpods $ctx | awk '{print $1}' | grep $NAME`
+	local context=gke_freight-hub_us-central1-c_fh-$ctx
+	local v="$1"
+	local NAME=${v/_/-}
+	local POD=`qpods $ctx | awk '{print $1}' | grep $NAME`
 	echo "Tailing log for:" $POD " for ENV:" $context
 	kubectl logs $POD -f --context=$context
+}
+
+function qlos() {
+	local ctx=""
+	local since=""
+	if [ $# -eq 2 ]; then
+		ctx=`get_default_ctx`
+		since=$2
+		echo "Current context set to '$ctx'"
+	elif [ $# -eq 3 ]; then
+		ctx=$2
+		since=$3
+		echo "Context passed as '$ctx'"
+	else
+		echo "Usage: qlos POD [ [SINCE [=num(h|m|s)]] | [CTX [=(dev|demo|prod)]] [SINCE [=num(h|m|s)]] ]"
+		echo -e "Example: qlos bo-listeners 3h \t\t# stream log for bo-listeners for last 3 hours"
+		echo -e "Example: qlos bo-listeners demo 10m \t# stream log for bo-listeners using demo context for last 10 minutes"
+		return 1
+	fi
+	local context=gke_freight-hub_us-central1-c_fh-$ctx
+	local v="$1"
+	local NAME=${v/_/-}
+	local POD=`qpods $ctx | awk '{print $1}' | grep $NAME`
+	echo "Tailing log for:" $POD " for ENV:" $context
+	kubectl logs $POD -f --context=$context --since=$since
 }
 
 function qdeploy() {
