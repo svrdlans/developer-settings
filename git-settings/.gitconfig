@@ -19,12 +19,13 @@
 [alias]
 	ru = remote update
 	f = fetch
-	cam = commit --amend -C HEAD
-	coam = commit --amend
-	comm = commit -m 
+	ca = commit --amend -C HEAD
+	cam = commit --amend
+	cm = commit -m 
 	mr = merge
 	mrn = merge --no-ff
 	co = checkout
+	cob = checkout -b
 	com = checkout master
 	cod = checkout dev
 	di = diff
@@ -46,14 +47,20 @@
 	# mhi = "!f() { git merge hotfix/ITA-$1; }; f"
 	# mha = "!f() { git merge hotfix/AI-$1; }; f"
 	# mhot = "!f() { git merge hotfix/$1; }; f"
-	mf = "!f() { git merge feature/$1; }; f"
+	mrf = "!f() { git merge feature/$1; }; f"
+	mrnf = "!f() { git merge --no-ff feature/$1; }; f"
 	st = status
 	br = branch
 	brm = branch --merged
 	bru = branch --no-merged
+	#brml = branch --merged | grep -oE "FH-\d{4,}" | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'
+	#brul = branch --no-merged | grep -oE "FH-\d{4,}" | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'
+    lh = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=format-local:'%Y-%m-%d %H:%M:%S' --graph
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+    ld = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short --graph
+    ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
 	pur = pull --rebase
 	pu = pull
-	hist = log --pretty=format:'%h %ad [%an] | %s%d' --color --graph --date=format-local:'%Y-%m-%d %H:%M:%S'
 	lol = log --oneline --abbrev-commit --graph --decorate
 	lom = log --oneline --abbrev-commit --graph --decorate --format='[%an]-%ad | %C(Yellow)%h%Creset %Cgreen%s%Creset%n' --date=short
 	sh = show
