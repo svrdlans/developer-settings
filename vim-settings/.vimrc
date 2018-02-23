@@ -10,34 +10,34 @@ call plug#begin('~/.vim/plugged')
 " Plug 'fatih/vim-go'
 
 " Elixir plugins
-  Plug 'elixir-editors/vim-elixir'
-  Plug 'avdgaag/vim-phoenix' 
-
+	Plug 'elixir-editors/vim-elixir'
+	Plug 'avdgaag/vim-phoenix' 
+ 
 " Fuzzy file search
-  Plug 'ctrlpvim/ctrlp.vim'
+	Plug 'ctrlpvim/ctrlp.vim'
 " Search by content
-  Plug 'mileszs/ack.vim'
-
+	Plug 'mileszs/ack.vim'
+"
 " Directory browsing 
 " Plug 'tpope/vim-vinegar'
- 
-" Powerline
-  Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 
-  Plug 'Shougo/neocomplete.vim'
-  Plug 'Raimondi/delimitMate'
-  Plug 'tpope/vim-surround'
+" Powerline
+	Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+
+	Plug 'Shougo/neocomplete.vim'
+	Plug 'Raimondi/delimitMate'
+	Plug 'tpope/vim-surround'
 
 " Git plugins
 "  Plug 'tpope/vim-fugitive'
 "
 " Theme plugins
-  Plug 'altercation/vim-colors-solarized' 
+	Plug 'altercation/vim-colors-solarized' 
 "  Plug 'danilo-augusto/vim-afterglow'
-  "Plug 'fatih/molokai'
+"Plug 'fatih/molokai'
 
 ""  Plug 'w0rp/ale'
-  
+"
 " Javascript plugins
 "  Plug 'pangloss/vim-javascript'
 "  Plug 'sbdchd/neoformat'
@@ -90,27 +90,32 @@ set clipboard^=unnamedplus
 
 let b:comment_leader='" ' 	" define comment leader
 
+autocmd BufRead .vimrc let b:comment_leader='" '
+
 autocmd BufNewFile,BufRead *.go
-	\ setlocal noexpandtab tabstop=8 shiftwidth=8
-	\ let b:comment_leader='// '
+			\ setlocal noexpandtab tabstop=8 shiftwidth=8 |
+			\ let b:comment_leader='// '
 autocmd BufNewFile,BufRead *.js
-	\ setlocal noexpandtab tabstop=2 shiftwidth=2
-	\ let b:comment_leader='// '
+			\ setlocal noexpandtab tabstop=2 shiftwidth=2 |
+			\ let b:comment_leader='// '
 autocmd BufNewFile,BufRead *.yml
-	\ setlocal expandtab tabstop=2 shiftwidth=2
-	\ let b:comment_leader='# '
+			\ setlocal expandtab tabstop=2 shiftwidth=2 |
+			\ let b:comment_leader='# '
 autocmd BufNewFile,BufRead *.sh
-	\ setlocal expandtab tabstop=2 shiftwidth=2
-	\ let b:comment_leader='# '
+			\ setlocal expandtab tabstop=2 shiftwidth=2 |
+			\ let b:comment_leader='# '
+autocmd BufNewFile,BufRead *.html
+			\ setlocal expandtab tabstop=2 shiftwidth=2 |
+			\ let b:comment_leader='// '
 
 au BufNewFile,BufRead *.py
-	\ setlocal tabstop=4
-	\ setlocal softtabstop=4
-	\ setlocal shiftwidth=4
-	\ setlocal textwidth=79
-	\ setlocal expandtab
-	\ setlocal autoindent
-	\ setlocal fileformat=unix
+			\ setlocal tabstop=4
+			\ setlocal softtabstop=4
+			\ setlocal shiftwidth=4
+			\ setlocal textwidth=79
+			\ setlocal expandtab
+			\ setlocal autoindent
+			\ setlocal fileformat=unix
 
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
@@ -163,11 +168,11 @@ nnoremap <leader>sv :so $MYVIMRC<cr>
 
 " toggle syntax
 map <F7> :if exists("g:syntax_on") <bar>
-	\	syntax off <bar>
-	\ else <bar>
-	\   syntax on <bar>
-	\ 	hi CursorLine cterm=underline ctermbg=bg <bar>
-	\ endif <cr>
+			\	syntax off <bar>
+			\ else <bar>
+			\   syntax on <bar>
+			\ 	hi CursorLine cterm=underline ctermbg=bg <bar>
+			\ endif <cr>
 
 " <--- DIRECTORY LISTING CONFIGURATION ---
 " set directory listing to use tree view
@@ -311,9 +316,9 @@ nnoremap <leader>fo :call Indent()<cr>
 let g:ctrlp_max_files = 2000
 let g:ctrlp_working_path_mode = 'a'
 let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\.git$\|_build$\|cover$\|deps$\|doc$\|ESData$',
-    \ 'file': '\.dump\|\.(exe|so|dll|ez)$'
-    \ }
+			\ 'dir':  '\.git$\|_build$\|cover$\|deps$\|doc$\|ESData$',
+			\ 'file': '\.dump\|\.(exe|so|dll|ez)$'
+			\ }
 nnoremap <C-b> :CtrlPBuffer<cr> 
 
 "--------------------------------------------------------------
@@ -442,7 +447,7 @@ inoremap <expr><C-g>     neocomplete#undo_completion()
 " <cr>: close popup and save indent.
 inoremap <silent> <cr> <C-r>=<SID>my_cr_function()<cr>
 function! s:my_cr_function()
-  return pumvisible() ? neocomplete#close_popup() : "\<cr>"
+	return pumvisible() ? neocomplete#close_popup() : "\<cr>"
 endfunction
 " <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -467,7 +472,7 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 " Enable heavy omni completion.
 if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
+	let g:neocomplete#sources#omni#input_patterns = {}
 endif
 "let g:neocomplete#sources#omni#input_patterns.go = '[^.[:digit:] *\t]\.\w*'
 let g:neocomplete#sources#omni#input_patterns.elixir = '[^.[:digit:] *\t]\.'
@@ -486,9 +491,13 @@ augroup ex
 	au FileType elixir setlocal expandtab tabstop=2 shiftwidth=2 autoindent copyindent
 	au FileType elixir setlocal foldmethod=syntax foldlevel=1 foldminlines=2	" use folding from syntax
 	au FileType elixir let b:comment_leader='# '
-	
+
 	au FileType elixir nnoremap <leader>m :w\|:!iex -S mix<cr>
 	au FileType elixir nnoremap <Space> za
+
+	au FileType elixir nnoremap <leader>rt :call RunTestFile()<cr>
+	au FileType elixir nnoremap <leader>RT :call RunNearestTest()<cr>
+	au FileType elixir nnoremap <leader>ra :call RunTests('')<cr>
 augroup END
 
 "---------------------------------------------
@@ -505,69 +514,140 @@ augroup END
 " project helpers
 "-------------------------------
 " search and replace logger text with anonymous function 
-nnoremap <leader>sl :%s/Logger\.\(debug\\|info\\|warn\\|error\) \(".\+"\)/Logger\.\1 fn -> \2 end/gc<cr>
+nnoremap  <leader>sl :%s/Logger\.\(debug\\|info\\|warn\\|error\)
+			\\( *( *\\| *\)\( *fn -> *\)\@!\(.\+$\)/Logger\.\1\2fn -> \4 end/gc<cr>
 " search and replace word under cursor - current line
 nnoremap <leader>sc :s/<c-r><c-w>//g<left><left>
 " search and replace word under cursor - all lines
 nnoremap <leader>sa :%s/<c-r><c-w>//gc<left><left><left>
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SWITCH BETWEEN TEST AND PRODUCTION CODE
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! OpenTestAlternate()
+	let new_file = AlternateForCurrentFile()
+	exec ':e ' . new_file
+endfunction
+
+function! AlternateForCurrentFile()
+	let current_file = expand("%")
+	let new_file = current_file
+	let in_spec = match(current_file, '^test/') != -1
+	let going_to_spec = !in_spec
+	let in_app = match(current_file, '\<lib\>') != -1
+	if going_to_spec
+		if in_app
+			let new_file = substitute(new_file, '^lib/', '', '')
+		end
+		let new_file = substitute(new_file, '\.ex$', '_test.exs', '')
+		let new_file = 'test/' . new_file
+	else
+		let new_file = substitute(new_file, '_test\.exs$', '.ex', '')
+		let new_file = substitute(new_file, '^test/', '', '')
+		let new_file = 'lib/' . new_file
+	endif
+	return new_file
+endfunction
+nnoremap <leader>. :call OpenTestAlternate()<cr>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" RUNNING TESTS
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! RunTestFile(...)
+	if a:0
+		let command_suffix = a:1
+	else
+		let command_suffix = ""
+	endif
+
+	" Run the tests for the previously-marked file.
+	let in_test_file = match(expand("%"), '\(_test.exs\)$') != -1
+	if in_test_file
+		call SetTestFile()
+	elseif !exists("t:grb_test_file")
+		return
+	end
+	call RunTests(t:grb_test_file . command_suffix)
+endfunction
+
+function! RunNearestTest()
+	let spec_line_number = line('.')
+	call RunTestFile(" --only line:" . spec_line_number)
+endfunction
+
+function! SetTestFile()
+	" Set the spec file that tests will be run for.
+	let t:grb_test_file=@%
+endfunction
+
+function! RunTests(filename)
+	" Write the file and run tests for the given filename
+	:w
+	:silent !clear
+	if filereadable("script/test")
+		exec ":!script/test " . a:filename
+	else
+		exec ":!mix test " . a:filename
+	end
+endfunction
+
 " Restore cursor position, window position, and last search after running a
 " command.
 function! Preserve(command)
-  " Save the last search.
-  let search = @/
+	" Save the last search.
+	let search = @/
 
-  " Save the current cursor position.
-  let cursor_position = getpos('.')
+	" Save the current cursor position.
+	let cursor_position = getpos('.')
 
-  " Save the current window position.
-  normal! H
-  let window_position = getpos('.')
-  call setpos('.', cursor_position)
+	" Save the current window position.
+	normal! H
+	let window_position = getpos('.')
+	call setpos('.', cursor_position)
 
-  " Execute the command.
-  execute a:command
+	" Execute the command.
+	execute a:command
 
-  " Restore the last search.
-  let @/ = search
+	" Restore the last search.
+	let @/ = search
 
-  " Restore the previous window position.
-  call setpos('.', window_position)
-  normal! zt
+	" Restore the previous window position.
+	call setpos('.', window_position)
+	normal! zt
 
-  " Restore the previous cursor position.
-  call setpos('.', cursor_position)
+	" Restore the previous cursor position.
+	call setpos('.', cursor_position)
 endfunction
 
 " Re-indent the whole buffer.
 function! Indent()
-  call Preserve('normal gg=G')
+	call Preserve('normal gg=G')
 endfunction
 
 " define function to modify tab label by adding '+' if buffer has changes
 function! GuiTabLabel()
-  let label = ''
-  let bufnrlist = tabpagebuflist(v:lnum)
+	let label = ''
+	let bufnrlist = tabpagebuflist(v:lnum)
 
-  " Add '+' if one of the buffers in the tab page is modified
-  for bufnr in bufnrlist
-    if getbufvar(bufnr, "&modified")
-      let label = '+'
-      break
-    endif
-  endfor
+	" Add '+' if one of the buffers in the tab page is modified
+	for bufnr in bufnrlist
+		if getbufvar(bufnr, "&modified")
+			let label = '+'
+			break
+		endif
+	endfor
 
-  " Append the number of windows in the tab page if more than one
-  let wincount = tabpagewinnr(v:lnum, '$')
-  if wincount > 1
-    let label .= wincount
-  endif
-  if label != ''
-    let label .= ' '
-  endif
+	" Append the number of windows in the tab page if more than one
+	let wincount = tabpagewinnr(v:lnum, '$')
+	if wincount > 1
+		let label .= wincount
+	endif
+	if label != ''
+		let label .= ' '
+	endif
 
-  " Append the buffer name
-  return label . bufname(bufnrlist[tabpagewinnr(v:lnum) - 1])
+	" Append the buffer name
+	return label . bufname(bufnrlist[tabpagewinnr(v:lnum) - 1])
 endfunction
 
 " modify tab label to have '+' at the beginning if the buffer is changed
