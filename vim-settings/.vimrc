@@ -81,6 +81,7 @@ set switchbuf=useopen	" reveal already opened files from the
 set hidden
 set scrolljump=5
 set scrolloff=10
+set regexpengine=1 " use old regexpengine to speed up scrolling
 
 " use clipboard without pbcopy
 set clipboard^=unnamed
@@ -90,34 +91,37 @@ set clipboard^=unnamedplus
 
 let b:comment_leader='" ' 	" define comment leader
 
-autocmd BufRead .vimrc let b:comment_leader='" '
+augroup comment_leader
+	au!
 
-autocmd BufNewFile,BufRead *.go
-			\ setlocal noexpandtab tabstop=8 shiftwidth=8 |
-			\ let b:comment_leader='// '
-autocmd BufNewFile,BufRead *.js
-			\ setlocal noexpandtab tabstop=2 shiftwidth=2 |
-			\ let b:comment_leader='// '
-autocmd BufNewFile,BufRead *.yml
-			\ setlocal expandtab tabstop=2 shiftwidth=2 |
-			\ let b:comment_leader='# '
-autocmd BufNewFile,BufRead *.sh
-			\ setlocal expandtab tabstop=2 shiftwidth=2 |
-			\ let b:comment_leader='# '
-autocmd BufNewFile,BufRead *.html
-			\ setlocal expandtab tabstop=2 shiftwidth=2 |
-			\ let b:comment_leader='// '
+	au BufRead .vimrc let b:comment_leader='" '
+	au BufNewFile,BufRead *.go
+				\ setlocal noexpandtab tabstop=8 shiftwidth=8 |
+				\ let b:comment_leader='// '
+	au BufNewFile,BufRead *.js
+				\ setlocal noexpandtab tabstop=2 shiftwidth=2 |
+				\ let b:comment_leader='// '
+	au BufNewFile,BufRead *.yml
+				\ setlocal expandtab tabstop=2 shiftwidth=2 |
+				\ let b:comment_leader='# '
+	au BufNewFile,BufRead *.sh
+				\ setlocal expandtab tabstop=2 shiftwidth=2 |
+				\ let b:comment_leader='# '
+	au BufNewFile,BufRead *.html
+				\ setlocal expandtab tabstop=2 shiftwidth=2 |
+				\ let b:comment_leader='// '
 
-au BufNewFile,BufRead *.py
-			\ setlocal tabstop=4
-			\ setlocal softtabstop=4
-			\ setlocal shiftwidth=4
-			\ setlocal textwidth=79
-			\ setlocal expandtab
-			\ setlocal autoindent
-			\ setlocal fileformat=unix
+	au BufNewFile,BufRead *.py
+				\ setlocal tabstop=4
+				\ setlocal softtabstop=4
+				\ setlocal shiftwidth=4
+				\ setlocal textwidth=79
+				\ setlocal expandtab
+				\ setlocal autoindent
+				\ setlocal fileformat=unix
 
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+	au BufNewFile,BufReadPost *.md set filetype=markdown
+augroup END
 
 " from mswin.vim: backspace and cursor keys wrap to previous/next line
 set backspace=indent,eol,start whichwrap+=<,>,[,]
@@ -136,7 +140,7 @@ vnoremap <BS> d
 " solarized
 "----------------------------------------------
 syntax on
-set t_Co=256
+" set t_Co=256
 set background=dark
 colorscheme solarized
 set cursorline
@@ -464,11 +468,15 @@ inoremap <expr><C-e>  neocomplete#cancel_popup()
 "let g:neocomplete#enable_auto_select = 1
 
 " Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+augroup omni_completion
+	au!
+
+	au FileType css setlocal omnifunc=csscomplete#CompleteCSS
+	au FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+	au FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+	au FileType python setlocal omnifunc=pythoncomplete#Complete
+	au FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+augroup END
 
 " Enable heavy omni completion.
 if !exists('g:neocomplete#sources#omni#input_patterns')
@@ -485,11 +493,11 @@ let g:neocomplete#sources#omni#input_patterns.elixir = '[^.[:digit:] *\t]\.'
 "---------------------------------------------
 " elixir
 "---------------------------------------------
-augroup ex
-	autocmd!
+augroup elixir
+	au!
 
 	au FileType elixir setlocal expandtab tabstop=2 shiftwidth=2 autoindent copyindent
-	au FileType elixir setlocal foldmethod=syntax foldlevel=1 foldminlines=2	" use folding from syntax
+" 	au FileType elixir setlocal foldmethod=syntax foldlevel=1 foldminlines=2	" use folding from syntax
 	au FileType elixir let b:comment_leader='# '
 
 	au FileType elixir nnoremap <leader>m :w\|:!iex -S mix<cr>
@@ -515,11 +523,11 @@ augroup END
 "-------------------------------
 " search and replace logger text with anonymous function 
 nnoremap  <leader>sl :%s/Logger\.\(debug\\|info\\|warn\\|error\)
-			\\( *( *\\| *\)\( *fn -> *\)\@!\(.\+$\)/Logger\.\1\2fn -> \4 end/gc<cr>
+			\\(.*fn -> *\)\@!\(.\+\)/Logger\.\1 fn ->\3\4 end/gc<cr>
 " search and replace word under cursor - current line
-nnoremap <leader>sc :s/<c-r><c-w>//g<left><left>
+nnoremap <leader>sc :s/\(<c-r><c-w>\)//g<left><left>
 " search and replace word under cursor - all lines
-nnoremap <leader>sa :%s/<c-r><c-w>//gc<left><left><left>
+nnoremap <leader>sa :%s/\(<c-r><c-w>\)//gc<left><left><left>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SWITCH BETWEEN TEST AND PRODUCTION CODE
