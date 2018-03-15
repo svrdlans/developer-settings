@@ -156,12 +156,31 @@ function_exists() {
 }
 
 for al in `__git_aliases`; do
-	alias g$al="git $al"
+	alias ,$al="git $al"
 
 	complete_func=_git_$(__git_aliased_command $al)
-	function_exists $complete_func && __git_complete g$al $complete_func
+	function_exists $complete_func && __git_complete ,$al $complete_func
 done
-alias brml="git branch --merged | grep -oE \"FH-\d{4,}\" | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'"
-alias brul="git branch --no-merged | grep -oE \"FH-\d{4,}\" | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'"
+alias brml=",brm | grep -oE \"FH-\d{4,}\" | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'"
+alias brul=",bru | grep -oE \"FH-\d{4,}\" | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'"
+alias brmd=",brm | grep -E \(feature\|hotfix\|bugfix\) | sed -E 's/([[:graph:]]+)/,del \1 \&\& ,delr \1/'"
+alias brud=",bru | grep -E \(feature\|hotfix\|bugfix\) | sed -E 's/([[:graph:]]+)/,del \1 \&\& ,delr \1/'"
 #
+#
+
+# here maps curl
+alias here_map="
+curl \
+  -X GET \
+  -H 'Content-Type: *' \
+  --get 'https://route.api.here.com/routing/7.2/calculateroute.json' \
+    --data-urlencode 'waypoint0=geo!stopOver!50.0522,8.2180' \
+    --data-urlencode 'waypoint1=geo!stopOver!50.0460,8.5561' \
+    --data-urlencode 'waypoint2=geo!stopOver!50.0957,8.5280' \
+    --data-urlencode 'mode=fastest;truck;traffic:default' \
+    --data-urlencode 'routeAttributes=wp,sh' \
+    --data-urlencode 'trailersCount=1' \
+    --data-urlencode 'app_id=kWiwwD5ZKZWirVPmaZDV' \
+    --data-urlencode 'app_code=qaVLRO2xzuhXIQlaXlifbA'"
+
 #
