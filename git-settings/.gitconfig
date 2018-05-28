@@ -31,6 +31,9 @@
 	cob = checkout -b
 	com = checkout master
 	cod = checkout dev
+	t = tag
+	ta = tag -a
+	td = tag -d
 	di = diff
 	dic = diff --cached
 	# fc = "!f() { git checkout feature/CORE-$1; }; f"
