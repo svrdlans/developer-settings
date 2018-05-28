@@ -1,12 +1,29 @@
 alias ctags='/usr/local/Cellar/ctags/5.8_1/bin/ctags'
 alias cdfh='cd /Users/svrdlans/projects/elixir/fh_umbrella/'
-alias extree="tree -I 'deps|_build'"
+alias cdex='cd /Users/svrdlans/projects/elixir/extreme_system/'
+alias cdgft='cd /Users/svrdlans/projects/elixir/gft/gft_backend/'
+alias extree="tree -I 'doc|deps|_build'"
 
 export PATH=$PATH:/usr/local/sbin
 
 # asdf specific
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
+#
+
+# kerl
+function kerl_default() {
+	export KERL_BUILD_BACKEND=tarball
+}
+function kerl_git() {
+	export KERL_BUILD_BACKEND=git
+	export OTP_GITHUB_URL=https://github.com/erlang/otp
+}
+function kerlug() {
+	echo "Getting releases from git."
+	`kerl_git`
+	kerl update releases
+}
 #
 
 # Powerline specific
@@ -30,7 +47,21 @@ fi
 function qdel() { kubectl delete pod "$@";}
 alias qctx='kubectl config current-context'
 alias qviewctx='kubectl config view'
-function qsetctx() { kubectl config use-context gke_freight-hub_us-central1-c_fh-"$@"; }
+
+function ctx_name() {
+	local ctx=$1
+	if [[ $1 == fh-* ]]; then
+		ctx="gke_freight-hub_us-central1-c_$1";
+	elif [[ $1 == gft-* ]]; then
+		ctx="gke_global-freight-tracking-202214_us-central1-b_$1";
+	fi
+	echo $ctx
+}
+function qsetctx() {
+	local ctx=`ctx_name $1`
+	kubectl config use-context "$ctx";
+}
+
 function qdown() { kubectl scale rc/"$@" --replicas=0; }
 function qup() { kubectl scale rc/"$@" --replicas=1; }
 
@@ -48,23 +79,23 @@ function qpods() {
 	if [ $# -eq 0 ]; then
 		kubectl get pod
 	else
-		local ctx="$1"
-		kubectl get pod --context="gke_freight-hub_us-central1-c_fh-$ctx"
+		local ctx=`ctx_name $1`
+		kubectl get pod --context="$ctx"
 	fi
 }
 
 function get_default_ctx() {
-	local valid_ctxs=(dev demo prod)
+	local valid_ctxs=(fh-dev fh-demo fh-prod gft-qa gft-prod minikube)
 	result=`qctx`
-	local ctx=${result##*-}
-	if ! [[ $result == *freight-hub* && ${valid_ctxs[@]} =~ $ctx ]]; then
-		ctx=dev
+	local ctx=${result##*_}
+	if ! [[ $result != error:* && ${valid_ctxs[@]} =~ $ctx ]]; then
+		ctx=fh-dev
 	fi
 	echo $ctx
 }
 
 function qlog() {
-	valid_ctxs=(dev demo prod)
+	valid_ctxs=(fh-dev fh-demo fh-prod gft-qa gft-prod minikube)
 	if [ $# -eq 1 ]; then
 		ctx=`get_default_ctx`
 		echo "Current context set to '$ctx'"
@@ -77,7 +108,7 @@ function qlog() {
 		echo -e "Example: qlog bo-listeners demo \t# stream complete log for bo-listeners for demo context"
 		return 1
 	fi
-	local context=gke_freight-hub_us-central1-c_fh-$ctx
+	local context=`ctx_name $ctx`
 	local v="$1"
 	local NAME=${v/_/-}
 	local POD=`qpods $ctx | awk '{print $1}' | grep $NAME`
@@ -102,7 +133,7 @@ function qlos() {
 		echo -e "Example: qlos bo-listeners demo 10m \t# stream log for bo-listeners using demo context for last 10 minutes"
 		return 1
 	fi
-	local context=gke_freight-hub_us-central1-c_fh-$ctx
+	local context=`ctx_name $ctx`
 	local v="$1"
 	local NAME=${v/_/-}
 	local POD=`qpods $ctx | awk '{print $1}' | grep $NAME`
@@ -112,9 +143,9 @@ function qlos() {
 
 function qdeploy() {
 	if [ $# -eq 2 ]; then
-		context=gke_freight-hub_us-central1-c_fh-dev
+		context=`ctx_name fh-dev`
 	else
-		context=gke_freight-hub_us-central1-c_fh-"$3"
+		context=`ctx_name $3`
 	fi
 	arg1="$1"
 	ctrl=${arg1/_/-}
@@ -139,7 +170,7 @@ function grepex() {
 		location=$2
 	fi
 	echo "Searching for '$1' at '$location':"
-	grep -lr --exclude-dir=deps --exclude-dir=_build --include=*.ex --include=*.exs $1 $location 
+	grep -lr --exclude-dir=deps --exclude-dir=doc --exclude-dir=_build --include=*.ex --include=*.exs $1 $location 
 }
 #
 
@@ -165,6 +196,7 @@ alias brml=",brm | grep -oE \"FH-\d{4,}\" | sed 's/^/https:\/\/freighthub.atlass
 alias brul=",bru | grep -oE \"FH-\d{4,}\" | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'"
 alias brmd=",brm | grep -E \(feature\|hotfix\|bugfix\) | sed -E 's/([[:graph:]]+)/,del \1 \&\& ,delr \1/'"
 alias brud=",bru | grep -E \(feature\|hotfix\|bugfix\) | sed -E 's/([[:graph:]]+)/,del \1 \&\& ,delr \1/'"
+alias chapps=",di HEAD~1...HEAD --name-only | sed -E 's|apps/([a-z0-9_]+)/.+|\1|' | uniq"
 #
 #
 
