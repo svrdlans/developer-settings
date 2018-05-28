@@ -56,15 +56,13 @@
 	br = branch
 	brm = branch --merged
 	bru = branch --no-merged
- 	
-    lh = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=format-local:'%Y-%m-%d %H:%M:%S' --graph
+	lh = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=format-local:'%Y-%m-%d %H:%M:%S' --graph
 	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
-    ld = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short --graph
-    ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+	ld = log --pretty=format:"%C(yellow)%h\\ %C(green)%ad%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=short --graph
+	ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+	lo = log
 	pur = pull --rebase
 	pu = pull
-	lol = log --oneline --abbrev-commit --graph --decorate
-	lom = log --oneline --abbrev-commit --graph --decorate --format='[%an]-%ad | %C(Yellow)%h%Creset %Cgreen%s%Creset%n' --date=short
 	sh = show
 	sp = "!f() { git show HEAD~$1; }; f"
 	psu = push -u origin
@@ -80,8 +78,11 @@
 	# resha = "!f() { git reset --hard origin/hotfix/AI-$1; }; f"
 	# reshot = "!f() { git reset --hard origin/hotfix/$1; }; f"
 	# resfea = "!f() { git reset --hard origin/feature/$1; }; f"
-	rebd = rebase dev
-	rebm = rebase master
+	rb = rebase
+	rbi = rebase -i
+	rbo = rebase --onto
+	rbd = rebase dev
+	rbm = rebase master
 	haut = "! for branch in `git branch --merged master -r *hotfix* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
 	faut = "! for branch in `git branch --merged master -r *feature* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
 	fautnm = "! for branch in `git branch --no-merged master -r *feature* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
