@@ -2,6 +2,8 @@ alias ctags='/usr/local/Cellar/ctags/5.8_1/bin/ctags'
 alias cdfh='cd /Users/svrdlans/projects/elixir/fh_umbrella/'
 alias cdex='cd /Users/svrdlans/projects/elixir/extreme_system/'
 alias cdgft='cd /Users/svrdlans/projects/elixir/gft/gft_backend/'
+alias cdpy='cd /Users/svrdlans/projects/python/'
+alias cddo='cd /Users/svrdlans/projects/docker/'
 alias extree="tree -I 'doc|deps|_build'"
 
 export PATH=$PATH:/usr/local/sbin
@@ -29,8 +31,7 @@ function kerlug() {
 # Powerline specific
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-if [ -d "/Library/Python/2.7/site-packages/powerline" ]
-then
+if [ -d "/Library/Python/2.7/site-packages/powerline" ]; then
 	powerline-daemon -q
 	POWERLINE_BASH_CONTINUATION=1
 	POWERLINE_BASH_SELECT=1
@@ -170,7 +171,7 @@ function grepex() {
 		location=$2
 	fi
 	echo "Searching for '$1' at '$location':"
-	grep -lr --exclude-dir=deps --exclude-dir=doc --exclude-dir=_build --include=*.ex --include=*.exs $1 $location 
+	grep -lr --exclude-dir=deps --exclude-dir=doc --exclude-dir=_build --include=*.ex --include=*.exs --include=*.eex $1 $location
 }
 #
 
@@ -196,7 +197,7 @@ alias brml=",brm | grep -oE \"FH-\d{4,}\" | sed 's/^/https:\/\/freighthub.atlass
 alias brul=",bru | grep -oE \"FH-\d{4,}\" | sed 's/^/https:\/\/freighthub.atlassian.net\/browse\//'"
 alias brmd=",brm | grep -E \(feature\|hotfix\|bugfix\) | sed -E 's/([[:graph:]]+)/,del \1 \&\& ,delr \1/'"
 alias brud=",bru | grep -E \(feature\|hotfix\|bugfix\) | sed -E 's/([[:graph:]]+)/,del \1 \&\& ,delr \1/'"
-alias chapps=",di HEAD~1...HEAD --name-only | sed -E 's|apps/([a-z0-9_]+)/.+|\1|' | uniq"
+alias chapps=",di master...HEAD --name-only | sed -E 's|apps/([a-z0-9_\.\-]+)/.+|\1|' | uniq"
 #
 #
 

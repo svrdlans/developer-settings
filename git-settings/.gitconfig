@@ -71,6 +71,11 @@
 	psu = push -u origin
 	ps = push
 	pso = push origin
+	pst = push --tags
+	rehe = reset HEAD
+	ress = reset --soft
+	resm = reset --mixed
+	resh = reset --hard
 	# resfc = "!f() { git reset --hard origin/feature/CORE-$1; }; f"
 	# resfi = "!f() { git reset --hard origin/feature/ITA-$1; }; f"
 	# resfm = "!f() { git reset --hard origin/feature/MAL-$1; }; f"
@@ -90,8 +95,9 @@
 	faut = "! for branch in `git branch --merged master -r *feature* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
 	fautnm = "! for branch in `git branch --no-merged master -r *feature* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
 	hautnm = "! for branch in `git branch --no-merged master -r *hotfix* | grep -v HEAD`;do echo `git show --format=\"%an %ae\" $branch | head -n 1` \t$branch; done | sort "
-	del = "!f() { git branch -d $1; }; f"
-	delr = "!f() { git pso --delete $1; }; f"
+	del = branch -d
+	delf = branch -D
+	delr = push origin --delete
 	# delfc = "!f() { git branch -d feature/CORE-$1; }; f"
 	# delfi = "!f() { git branch -d feature/ITA-$1; }; f"
 	# delhc = "!f() { git branch -d hotfix/CORE-$1; }; f"

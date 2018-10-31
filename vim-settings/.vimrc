@@ -11,6 +11,7 @@ call plug#begin('~/.vim/plugged')
 
 " Elixir plugins
 	Plug 'elixir-editors/vim-elixir'
+	Plug 'mhinz/vim-mix-format'
 	Plug 'avdgaag/vim-phoenix' 
  
 " Fuzzy file search
@@ -68,6 +69,7 @@ set autoindent    " always set autoindenting on
 set copyindent    " copy the previous indentation on autoindenting
 set shiftwidth=4  " number of spaces to use for autoindenting
 set shiftround    " use multiple of shiftwidth when indenting with '<' and '>'
+set noshowmode
 " don't wrap lines
 set nowrap
 set ignorecase
@@ -84,8 +86,7 @@ set scrolloff=10
 set regexpengine=1 " use old regexpengine to speed up scrolling
 
 " use clipboard without pbcopy
-set clipboard^=unnamed
-set clipboard^=unnamedplus
+set clipboard=unnamed,unnamedplus
 
 "set statusline=%F%m%r%h%w\ [type=%y\ %{&ff}]\ \[buff=%n]\ [%l/%L\,%c]\ (%p%%)\  
 
@@ -112,12 +113,12 @@ augroup comment_leader
 				\ let b:comment_leader='// '
 
 	au BufNewFile,BufRead *.py
-				\ setlocal tabstop=4
-				\ setlocal softtabstop=4
-				\ setlocal shiftwidth=4
-				\ setlocal textwidth=79
-				\ setlocal expandtab
-				\ setlocal autoindent
+				\ setlocal tabstop=4 |
+				\ setlocal softtabstop=4 |
+				\ setlocal shiftwidth=4 |
+				\ setlocal textwidth=79 |
+				\ setlocal expandtab |
+				\ setlocal autoindent |
 				\ setlocal fileformat=unix
 
 	au BufNewFile,BufReadPost *.md set filetype=markdown
@@ -139,8 +140,7 @@ vnoremap <BS> d
 "----------------------------------------------
 " solarized
 "----------------------------------------------
-syntax on
-" set t_Co=256
+syntax enable
 set background=dark
 colorscheme solarized
 set cursorline
@@ -264,19 +264,14 @@ nnoremap <Right> :vertical resize -1<cr>
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
-" <leader>x is Cut to clipboard
-"vnoremap <leader>x "+x
-
-" <leader>y is Copy to clipboard
-vnoremap <leader>y "+y
-
 " comment selection or current line
 map <leader>/ :s/^/<c-r>=escape(b:comment_leader,'\/')<cr>/<cr>:noh<cr>
 " uncomment selection or current line
 map <leader>' :s/^\V<c-r>=escape(b:comment_leader,'\/')<cr>//e<cr>:noh<cr>
 
-" <leader>y is Paste from clipboard
-map <leader>p "+gP
+" map <leader>p to paste from register 0
+nnoremap <leader>p "0p
+vnoremap <leader>p "0p
 " toggle paste mode
 set pastetoggle=<f2>
 
@@ -500,7 +495,10 @@ augroup elixir
 " 	au FileType elixir setlocal foldmethod=syntax foldlevel=1 foldminlines=2	" use folding from syntax
 	au FileType elixir let b:comment_leader='# '
 
-	au FileType elixir nnoremap <leader>m :w\|:!iex -S mix<cr>
+	au FileType elixir nnoremap <leader>mx :w\|:!iex -S mix<cr>
+" 	au FileType elixir nnoremap <leader>mf :w\|:!mix format<cr>
+	au FileType elixir nnoremap <leader>mf :MixFormat<cr>
+	au FileType elixir nnoremap <leader>md :MixFormatDiff<cr>
 	au FileType elixir nnoremap <Space> za
 
 	au FileType elixir nnoremap <leader>rt :call RunTestFile()<cr>
