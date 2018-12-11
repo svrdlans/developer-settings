@@ -76,6 +76,9 @@
 	ress = reset --soft
 	resm = reset --mixed
 	resh = reset --hard
+	ressh = "!f() { git reset --soft HEAD~$1; }; f"
+	resmh = "!f() { git reset --mixed HEAD~$1; }; f"
+	reshh = "!f() { git reset --hard HEAD~$1; }; f"
 	# resfc = "!f() { git reset --hard origin/feature/CORE-$1; }; f"
 	# resfi = "!f() { git reset --hard origin/feature/ITA-$1; }; f"
 	# resfm = "!f() { git reset --hard origin/feature/MAL-$1; }; f"
