@@ -6,9 +6,6 @@ filetype plugin indent off
 
 " define plugins
 call plug#begin('~/.vim/plugged')
-" Go plugins
-" Plug 'fatih/vim-go'
-
 " Elixir plugins
 	Plug 'elixir-editors/vim-elixir'
 	Plug 'mhinz/vim-mix-format'
@@ -18,9 +15,6 @@ call plug#begin('~/.vim/plugged')
 	Plug 'ctrlpvim/ctrlp.vim'
 " Search by content
 	Plug 'mileszs/ack.vim'
-"
-" Directory browsing 
-" Plug 'tpope/vim-vinegar'
 
 " Powerline
 	Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
@@ -29,20 +23,8 @@ call plug#begin('~/.vim/plugged')
 	Plug 'Raimondi/delimitMate'
 	Plug 'tpope/vim-surround'
 
-" Git plugins
-"  Plug 'tpope/vim-fugitive'
-"
 " Theme plugins
 	Plug 'altercation/vim-colors-solarized' 
-"  Plug 'danilo-augusto/vim-afterglow'
-"Plug 'fatih/molokai'
-
-""  Plug 'w0rp/ale'
-"
-" Javascript plugins
-"  Plug 'pangloss/vim-javascript'
-"  Plug 'sbdchd/neoformat'
-"  Plug 'prettier/prettier'
 call plug#end()
 
 " enable filetype plugins
@@ -129,14 +111,6 @@ set backspace=indent,eol,start whichwrap+=<,>,[,]
 " from mswin.vim: backspace in Visual mode deletes selection
 vnoremap <BS> d
 
-"----------------------------------------------
-" colorscheme
-"----------------------------------------------
-" set color scheme
-"colorscheme afterglow
-"let g:rehash256 = 1
-"let g:molokai_original = 1
-"colorscheme molokai
 "----------------------------------------------
 " solarized
 "----------------------------------------------
@@ -306,10 +280,6 @@ nnoremap <leader>fo :call Indent()<cr>
 "--------------------------------------------------------------
 
 "--------------------------------------------------------------
-" fugitive
-"--------------------------------------------------------------
-"set statusline+=%{fugitive#statusline()}\ 
-"--------------------------------------------------------------
 " ctrlp
 "--------------------------------------------------------------
 let g:ctrlp_max_files = 2000
@@ -326,75 +296,6 @@ nnoremap <C-b> :CtrlPBuffer<cr>
 map <leader>u :Ack <C-R><C-W> --ignore-dir vendor --ignore-dir coverage --ignore-dir log<CR><CR>
 map <leader>U :ccl<CR>
 
-
-"---------------------------------------------
-" vim-go
-"---------------------------------------------
-"let g:go_fmt_fail_silently = 1
-"let g:go_fmt_command = "goimports"
-"let g:go_autodetect_gopath = 1
-"let g:go_list_type = "quickfix"
-"let g:go_auto_type_info = 0
-"let g:go_echo_command_info= 0
-"
-"let g:go_highlight_space_tab_error = 0
-"let g:go_highlight_array_whitespace_error = 0
-"let g:go_highlight_trailing_whitespace_error = 0
-"let g:go_highlight_extra_types = 0
-"let g:go_highlight_build_constraints = 1
-"let g:go_highlight_types = 1
-"let g:go_highlight_fields = 1
-"let g:go_highlight_functions = 1
-"let g:go_highlight_methods = 1
-"let g:go_auto_sameids = 0
-"
-"nmap <C-g> :GoDecls<cr>
-"nnoremap <silent> <leader>fd :GoSameIds<cr>
-"nnoremap <silent> <leader>ff :GoSameIdsClear<cr>
-"nnoremap <silent> <leader>fr :GoReferrers<cr>
-"nnoremap <leader>rn :GoRename<space>
-"nnoremap <leader>fi :GoImpl<cr>
-"
-"augroup go
-"  autocmd!
-"
-"  autocmd FileType go nmap <silent> <leader>gv <Plug>(go-def-vertical)
-"  autocmd FileType go nmap <silent> <leader>gs <Plug>(go-def-split)
-"
-"  autocmd FileType go nmap <silent> <leader>gi <Plug>(go-info)
-"  autocmd FileType go nmap <silent> <leader>gl <Plug>(go-metalinter)
-"
-"  autocmd FileType go nmap <silent> <leader>gb <Plug>(go-build)
-"  autocmd FileType go nmap <silent> <leader>gt <Plug>(go-test)
-"  autocmd FileType go nmap <silent> <leader>gr <Plug>(go-run)
-"  autocmd FileType go nmap <silent> <leader>ge <Plug>(go-install)
-"
-"  autocmd FileType go nmap <silent> <leader>gd <Plug>(go-doc)
-"  autocmd FileType go nmap <silent> <leader>gc <Plug>(go-coverage-toggle)
-"  
-"  " I like these more!
-"  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-"  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-"  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
-"  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
-"augroup END
-
-"------------------------------------------------------------------------------
-" Syntastic
-"------------------------------------------------------------------------------
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"
-"let g:syntastic_aggregate_errors = 1
-"let g:syntastic_always_populate_loc_list = 0
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-"
-"let g:syntastic_python_checkers = ['python']
-"let g:syntastic_javascript_checkers = ['eslint']
-
 " map keys to scroll the error list
 nnoremap <leader>lj :lnext<cr>
 nnoremap <leader>lk :lprev<cr>
@@ -406,18 +307,6 @@ nnoremap <leader>cj :cnext<cr>
 nnoremap <leader>ck :cprev<cr>
 nnoremap <leader>co :copen<cr>
 nnoremap <leader>cc :cclose<cr>
-
-"------------------------------------------------------------------------------
-" ale
-"------------------------------------------------------------------------------
-"set statusline+=%#warningmsg#
-"set statusline+=%{ALEGetStatusLine()}
-"set statusline+=%*
-"let g:ale_javascript_eslint_use_global = 1
-"let g:ale_linters = {
-"\   'javascript': ['eslint'],
-"\}
-
 
 "------------------------------------------------------------------------------
 " NeoComplete
@@ -435,15 +324,13 @@ let g:neocomplete#enable_smart_case = 1
 let g:neocomplete#sources#syntax#min_keyword_length = 3
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 
-" Close popup by <Space>.
-" inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
 " Plugin key-mappings.
 inoremap <expr><C-g>     neocomplete#undo_completion()
 "inoremap <expr><C-l>     neocomplete#complete_common_string()
 
 " Recommended key-mappings.
 " <cr>: close popup and save indent.
+
 inoremap <silent> <cr> <C-r>=<SID>my_cr_function()<cr>
 function! s:my_cr_function()
 	return pumvisible() ? neocomplete#close_popup() : "\<cr>"
@@ -456,6 +343,7 @@ inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><C-y>  neocomplete#close_popup()
 inoremap <expr><C-e>  neocomplete#cancel_popup()
+
 " Close popup by <Space>.
 "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
 
@@ -496,7 +384,7 @@ augroup elixir
 	au FileType elixir let b:comment_leader='# '
 
 	au FileType elixir nnoremap <leader>mx :w\|:!iex -S mix<cr>
-" 	au FileType elixir nnoremap <leader>mf :w\|:!mix format<cr>
+	au FileType elixir nnoremap <leader>mc :w\|:!mix compile<cr>
 	au FileType elixir nnoremap <leader>mf :MixFormat<cr>
 	au FileType elixir nnoremap <leader>md :MixFormatDiff<cr>
 	au FileType elixir nnoremap <Space> za
@@ -505,16 +393,6 @@ augroup elixir
 	au FileType elixir nnoremap <leader>RT :call RunNearestTest()<cr>
 	au FileType elixir nnoremap <leader>ra :call RunTests('')<cr>
 augroup END
-
-"---------------------------------------------
-" prettier
-"---------------------------------------------
-"" set formatting program with args
-"set formatprg=prettier\ --stdin\ --print-width\ 120\ --single-quote
-"" use formatprg when available
-"let g:neoformat_try_formatprg = 1
-"" map Ctrl-F to format js code
-"nnoremap <c-f> :Neoformat prettier<cr>
 
 "-------------------------------
 " project helpers
