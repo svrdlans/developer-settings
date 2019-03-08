@@ -198,6 +198,7 @@ alias brul=",bru | grep -oE \"FH-\d{4,}\" | sed 's/^/https:\/\/freighthub.atlass
 alias brmd=",brm | grep -E \(feature\|hotfix\|bugfix\) | sed -E 's/([[:graph:]]+)/,del \1 \&\& ,delr \1/'"
 alias brud=",bru | grep -E \(feature\|hotfix\|bugfix\) | sed -E 's/([[:graph:]]+)/,del \1 \&\& ,delr \1/'"
 alias chapps=",di master...HEAD --name-only | sed -E 's|apps/([a-z0-9_\.\-]+)/.+|\1|' | uniq"
+alias migras=",di master...HEAD --name-only -- ../**/priv/repo/migrations/. | sed -E 's|apps/([a-z0-9_\.\-]+)/.+|\1|' | uniq"
 #
 #
 
