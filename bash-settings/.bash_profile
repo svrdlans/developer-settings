@@ -187,7 +187,7 @@ function_exists() {
 	return $?
 }
 
-for al in `__git_aliases`; do
+for al in `__git_get_config_variables "alias"`; do
 	alias ,$al="git $al"
 
 	complete_func=_git_$(__git_aliased_command $al)
