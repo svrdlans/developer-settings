@@ -7,10 +7,30 @@ alias cddo='cd /Users/svrdlans/projects/docker/'
 alias extree="tree -I 'doc|deps|_build'"
 
 export PATH=$PATH:/usr/local/sbin
+export PATH=$PATH:$HOME/Library/Python/2.7/bin
+export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/10/bin
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/svrdlans/install/google-cloud-sdk/path.bash.inc' ]; then . '/Users/svrdlans/install/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/svrdlans/install/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/svrdlans/install/google-cloud-sdk/completion.bash.inc'; fi
+
+HOMEBREW_PREFIX=$(brew --prefix)
+if type brew &>/dev/null; then
+  for COMPLETION in "$HOMEBREW_PREFIX"/etc/bash_completion.d/*
+  do
+    [[ -f $COMPLETION ]] && source "$COMPLETION"
+  done
+  if [[ -f ${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh ]];
+  then
+    source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+  fi
+fi
 
 # asdf specific
-. $HOME/.asdf/asdf.sh
-. $HOME/.asdf/completions/asdf.bash
+. $(brew --prefix asdf)/asdf.sh
+. $(brew --prefix asdf)/etc/bash_completion.d/asdf.bash
 #
 
 # kerl
@@ -31,17 +51,12 @@ function kerlug() {
 # Powerline specific
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-if [ -d "/Library/Python/2.7/site-packages/powerline" ]; then
+if [ -d "$HOME/Library/Python/2.7/lib/python/site-packages/powerline" ]; then
 	powerline-daemon -q
 	POWERLINE_BASH_CONTINUATION=1
 	POWERLINE_BASH_SELECT=1
-	. /Library/Python/2.7/site-packages/powerline/bindings/bash/powerline.sh
+	. $HOME/Library/Python/2.7/lib/python/site-packages/powerline/bindings/bash/powerline.sh
 fi
-#
-
-# gcloud
-. /Users/svrdlans/install/google-cloud-sdk/completion.bash.inc
-. /Users/svrdlans/install/google-cloud-sdk/path.bash.inc
 #
 
 # kubectl
@@ -217,4 +232,4 @@ curl \
     --data-urlencode 'app_id=kWiwwD5ZKZWirVPmaZDV' \
     --data-urlencode 'app_code=qaVLRO2xzuhXIQlaXlifbA'"
 
-#
+
