@@ -35,10 +35,6 @@
         "priority": 20
       },
       {
-        "function": "powerline.segments.shell.last_pipe_status",
-        "priority": 50
-      },
-      {
         "function": "powerline_gitstatus.gitstatus",
         "priority": 10
       }
