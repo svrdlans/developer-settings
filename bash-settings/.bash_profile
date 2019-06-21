@@ -186,7 +186,7 @@ function grepex() {
 		location=$2
 	fi
 	echo "Searching for '$1' at '$location':"
-	grep -lr --exclude-dir=deps --exclude-dir=doc --exclude-dir=_build --include=*.ex --include=*.exs --include=*.eex $1 $location
+	grep -lr -E --exclude-dir=deps --exclude-dir=doc --exclude-dir=_build --include=*.ex --include=*.exs --include=*.eex -e "$1" $location
 }
 #
 
