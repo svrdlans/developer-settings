@@ -284,8 +284,10 @@ nnoremap <leader>fo :call Indent()<cr>
 "--------------------------------------------------------------
 let g:ctrlp_max_files = 2000
 let g:ctrlp_working_path_mode = 'a'
+let g:ctrlp_brief_prompt = 1
+let g:ctrlp_follow_symlinks = 1
 let g:ctrlp_custom_ignore = {
-			\ 'dir':  '\.git$\|_build$\|cover$\|deps$\|doc$\|ESData$',
+			\ 'dir':  '\.git$\|_build$\|cover$\|deps$\|doc$\|ESData$\|assets',
 			\ 'file': '\.dump\|\.(exe|so|dll|ez)$'
 			\ }
 nnoremap <C-b> :CtrlPBuffer<cr> 
@@ -385,6 +387,7 @@ augroup elixir
 
 	au FileType elixir nnoremap <leader>mx :w\|:!iex -S mix<cr>
 	au FileType elixir nnoremap <leader>mc :w\|:!mix compile<cr>
+	au FileType elixir nnoremap <leader>mb :w\|:!mix bless<cr>
 	au FileType elixir nnoremap <leader>mf :MixFormat<cr>
 	au FileType elixir nnoremap <leader>md :MixFormatDiff<cr>
 	au FileType elixir nnoremap <Space> za
@@ -536,3 +539,15 @@ endfunction
 
 " modify tab label to have '+' at the beginning if the buffer is changed
 set guitablabel=%{GuiTabLabel()}
+
+" define function to rename current file
+function! RenameFile()
+    let old_name = expand('%')
+    let new_name = input('New file name: ', expand('%'), 'file')
+    if new_name != '' && new_name != old_name
+        exec ':saveas ' . new_name
+        exec ':silent !rm ' . old_name
+        redraw!
+    endif
+endfunction
+map <leader>n :call RenameFile()<cr>
