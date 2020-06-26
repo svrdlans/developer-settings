@@ -1,5 +1,6 @@
 alias ctags='/usr/local/Cellar/ctags/5.8_1/bin/ctags'
 alias cdfh='cd /Users/svrdlans/projects/elixir/fh_umbrella/'
+alias cdvo='cd /Users/svrdlans/projects/elixir/vof/'
 alias cdex='cd /Users/svrdlans/projects/elixir/extreme_system/'
 alias cdgft='cd /Users/svrdlans/projects/elixir/gft/gft_backend/'
 alias cdpy='cd /Users/svrdlans/projects/python/'
@@ -9,6 +10,10 @@ alias extree="tree -I 'doc|deps|_build'"
 export PATH=$PATH:/usr/local/sbin
 export PATH=$PATH:$HOME/Library/Python/2.7/bin
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/10/bin
+
+export NODE_COOKIE=my_own_node_cookie
+
+export LOCAL_BUILD=true
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/svrdlans/install/google-cloud-sdk/path.bash.inc' ]; then . '/Users/svrdlans/install/google-cloud-sdk/path.bash.inc'; fi
@@ -59,8 +64,63 @@ if [ -d "$HOME/Library/Python/2.7/lib/python/site-packages/powerline" ]; then
 fi
 #
 
+# Test an IP address for validity:
+# Usage:
+#      valid_ip IP_ADDRESS
+#      if [[ $? -eq 0 ]]; then echo good; else echo bad; fi
+#   OR
+#      if valid_ip IP_ADDRESS; then echo good; else echo bad; fi
+#
+function valid_ip() {
+    local  ip=$1
+    local  stat=1
+
+    if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+        OIFS=$IFS
+        IFS='.'
+        ip=($ip)
+        IFS=$OIFS
+        [[ ${ip[0]} -le 255 && ${ip[1]} -le 255 \
+            && ${ip[2]} -le 255 && ${ip[3]} -le 255 ]]
+        stat=$?
+    fi
+    echo $stat
+}
+
+function should_continue() {
+	read -p "Continue (y/n)? " -n 1 -r choice
+	case "$choice" in 
+		y|Y ) echo "yes";;
+		* ) echo "no";;
+	esac
+}
+
 # kubectl
 function qdel() { kubectl delete pod "$@";}
+function qdesc() { kubectl describe pod "$@";}
+# function qallowip { gcloud compute firewall-rules update allow-burmaja-home --source-ranges "$@"/32; }
+function qallowip {
+	local res=1
+	if [[ $# -ne 1 ]]; then
+		echo "One parameter requred: IP address!"
+		return 1;
+	else
+		res=$(valid_ip $@)
+		if [[ $res -eq 0 ]]; then
+			echo "Replacing allowed IP in GCP firewall with: $@"
+			if [[ $(should_continue) = "yes" ]]; then
+				echo
+				gcloud compute firewall-rules update allow-burmaja-home --source-ranges $@/32;
+			else
+				echo
+				echo "User cancelled, exiting."
+			fi
+		else
+			echo "$@ is not a valid IP address"
+			return 1
+		fi
+	fi
+}
 alias qctx='kubectl config current-context'
 alias qviewctx='kubectl config view'
 
@@ -175,7 +235,7 @@ tab() {
 }
 #
 
-# grep elixir project
+# grep elixir project for files containing search pattern
 function grepex() {
 	location="./"
 	if [ $# -eq 0 ]; then
@@ -186,7 +246,37 @@ function grepex() {
 		location=$2
 	fi
 	echo "Searching for '$1' at '$location':"
-	grep -lr -E --exclude-dir=deps --exclude-dir=doc --exclude-dir=_build --include=*.ex --include=*.exs --include=*.eex -e "$1" $location
+	grep -lr -F --exclude-dir=deps --exclude-dir=doc --exclude-dir=_build --include=*.ex --include=*.exs --include=*.eex -e "$1" $location
+}
+#
+
+# grep yaml files containing search pattern
+function grepml() {
+	location="./"
+	if [ $# -eq 0 ]; then
+		echo "Search pattern required!"
+		return 1
+	fi
+	if [ $# -eq 2 ]; then
+		location=$2
+	fi
+	echo "Searching for '$1' at '$location':"
+	grep -lr -F --include=*.yaml -e "$1" $location
+}
+#
+
+# grep elixir project for files not containing search pattern
+function nopex() {
+	location="./"
+	if [ $# -eq 0 ]; then
+		echo "Search pattern required!"
+		return 1
+	fi
+	if [ $# -eq 2 ]; then
+		location=$2
+	fi
+	echo "Searching for '$1' at '$location':"
+	grep -Lr -F --exclude-dir=deps --exclude-dir=doc --exclude-dir=_build --include=*.ex --include=*.exs --include=*.eex -e "$1" $location
 }
 #
 
