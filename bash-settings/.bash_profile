@@ -3,6 +3,8 @@ alias cdfh='cd /Users/svrdlans/projects/elixir/fh_umbrella/'
 alias cdvo='cd /Users/svrdlans/projects/elixir/vof/'
 alias cdex='cd /Users/svrdlans/projects/elixir/extreme_system/'
 alias cdgft='cd /Users/svrdlans/projects/elixir/gft/gft_backend/'
+alias cdbe='cd /Users/svrdlans/projects/elixir/nfi/beskar/'
+alias cdal='cd /Users/svrdlans/projects/elixir/nfi/albus/'
 alias cdpy='cd /Users/svrdlans/projects/python/'
 alias cddo='cd /Users/svrdlans/projects/docker/'
 alias extree="tree -I 'doc|deps|_build'"
@@ -109,10 +111,10 @@ function qallowip {
 		if [[ $res -eq 0 ]]; then
 			echo "Replacing allowed IP in GCP firewall with: $@"
 			if [[ $(should_continue) = "yes" ]]; then
-				echo
+				echo ""
 				gcloud compute firewall-rules update allow-burmaja-home --source-ranges $@/32;
 			else
-				echo
+				echo ""
 				echo "User cancelled, exiting."
 			fi
 		else
