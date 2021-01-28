@@ -3,6 +3,7 @@ alias cdfh='cd /Users/svrdlans/projects/elixir/fh_umbrella/'
 alias cdvo='cd /Users/svrdlans/projects/elixir/vof/'
 alias cdex='cd /Users/svrdlans/projects/elixir/extreme_system/'
 alias cdgft='cd /Users/svrdlans/projects/elixir/gft/gft_backend/'
+alias cdbq='cd /Users/svrdlans/projects/big_query/'
 alias cdbe='cd /Users/svrdlans/projects/elixir/nfi/beskar/'
 alias cdal='cd /Users/svrdlans/projects/elixir/nfi/albus/'
 alias cdpy='cd /Users/svrdlans/projects/python/'
@@ -12,10 +13,21 @@ alias extree="tree -I 'doc|deps|_build'"
 export PATH=$PATH:/usr/local/sbin
 export PATH=$PATH:$HOME/Library/Python/2.7/bin
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/10/bin
+export PATH=/usr/local/opt/libpq/bin:$PATH
 
 export NODE_COOKIE=my_own_node_cookie
 
 export LOCAL_BUILD=true
+# Albus related configs
+export ALBUS_GOOGLE_CLIENT_ID=368867814379-tsqr4fdpob0thgack6jqk79a822bk7s7.apps.googleusercontent.com
+export ALBUS_GOOGLE_CLIENT_SECRET=XX1jF7gkXxXrKuWiE3tVjrMK
+export ALBUS_EMAIL_TO=srdjan.svrdlan@gmail.com
+export ALBUS_OFFERED_LOADS_REMINDER_IN_MIN=5
+export ALBUS_RESERVING_LOADS_EXPIRED_IN_MIN=5
+export ALBUS_RESERVING_EXPIRED_RETRY_COUNT=3
+export ALBUS_RESERVING_EXPIRED_RETRY_INTERVAL_MS=1000
+export ALBUS_BOOKING_LOADS_EXPIRED_IN_MIN=5
+export ALBUS_TIMERS_NOT_BOOKED_IN_MIN=5
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/svrdlans/install/google-cloud-sdk/path.bash.inc' ]; then . '/Users/svrdlans/install/google-cloud-sdk/path.bash.inc'; fi
@@ -41,6 +53,7 @@ fi
 #
 
 # kerl
+export KERL_BUILD_DOCS=yes
 function kerl_default() {
 	export KERL_BUILD_BACKEND=tarball
 }
@@ -97,6 +110,10 @@ function should_continue() {
 	esac
 }
 
+function get_my_public_ip() {
+	dig +short myip.opendns.com @resolver1.opendns.com
+}
+
 # kubectl
 function qdel() { kubectl delete pod "$@";}
 function qdesc() { kubectl describe pod "$@";}
@@ -123,6 +140,10 @@ function qallowip {
 		fi
 	fi
 }
+function qallowmyip {
+	local myip=$(get_my_public_ip)
+	`qallowip $myip`
+}
 alias qctx='kubectl config current-context'
 alias qviewctx='kubectl config view'
 
@@ -142,6 +163,9 @@ function qsetctx() {
 
 function qdown() { kubectl scale rc/"$@" --replicas=0; }
 function qup() { kubectl scale rc/"$@" --replicas=1; }
+
+function qdepdown() { kubectl scale --replicas 0 deployment/"$@"; }
+function qdepup() { kubectl scale --replicas 1 deployment/"$@"; }
 
 function qerc() { kubectl edit rc "$@"; }
 function qecm() { kubectl edit configmap "$@"; }
@@ -163,7 +187,7 @@ function qpods() {
 }
 
 function get_default_ctx() {
-	local valid_ctxs=(fh-dev fh-demo fh-prod gft-qa gft-prod minikube)
+	local valid_ctxs=(albus fh-dev fh-demo fh-prod gft-qa gft-prod minikube)
 	result=`qctx`
 	local ctx=${result##*_}
 	if ! [[ $result != error:* && ${valid_ctxs[@]} =~ $ctx ]]; then
@@ -173,7 +197,7 @@ function get_default_ctx() {
 }
 
 function qlog() {
-	valid_ctxs=(fh-dev fh-demo fh-prod gft-qa gft-prod minikube)
+	valid_ctxs=(albus fh-dev fh-demo fh-prod gft-qa gft-prod minikube)
 	if [ $# -eq 1 ]; then
 		ctx=`get_default_ctx`
 		echo "Current context set to '$ctx'"
@@ -216,7 +240,7 @@ function qlos() {
 	local NAME=${v/_/-}
 	local POD=`qpods $ctx | awk '{print $1}' | grep $NAME`
 	echo "Tailing log for:" $POD " for ENV:" $context
-	kubectl logs $POD -f --context=$context --since=$since
+	kubectl logs $POD -f --context=$context --since=$since --all-containers=true
 }
 
 function qdeploy() {
@@ -228,6 +252,14 @@ function qdeploy() {
 	arg1="$1"
 	ctrl=${arg1/_/-}
 	kubectl rolling-update $ctrl --image=gcr.io/freight-hub/"$1":0.0.1-"$2" --update-period=1s --poll-interval=2s --context=$context
+}
+
+function qlistns() {
+	kubectl get namespace
+}
+
+function qsetns() {
+	kubectl config set-context --current --namespace="$1"
 }
 #
 
