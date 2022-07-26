@@ -10,21 +10,34 @@ call plug#begin('~/.vim/plugged')
 	Plug 'elixir-editors/vim-elixir'
 	Plug 'mhinz/vim-mix-format'
 	Plug 'avdgaag/vim-phoenix' 
+	Plug 'vim-test/vim-test'
+
+" Rust plugin
+	Plug 'rust-lang/rust.vim'
+
+" Code completion
+	Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+" Elixir language server
+	" Plug 'amiralies/coc-elixir', {'do': 'yarn install && yarn prepack'}
  
 " Fuzzy file search
 	Plug 'ctrlpvim/ctrlp.vim'
 " Search by content
 	Plug 'mileszs/ack.vim'
 
-" Powerline
-	Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
-
-	Plug 'Shougo/neocomplete.vim'
-	Plug 'Raimondi/delimitMate'
-	Plug 'tpope/vim-surround'
+	" Plug 'Raimondi/delimitMate'
+	" Plug 'tpope/vim-surround'
 
 " Theme plugins
 	Plug 'altercation/vim-colors-solarized' 
+
+" Git
+	Plug 'tpope/vim-fugitive'
+
+" Status line
+	" Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+	Plug 'vim-airline/vim-airline'
+	Plug 'vim-airline/vim-airline-themes'
 call plug#end()
 
 " enable filetype plugins
@@ -66,6 +79,22 @@ set hidden
 set scrolljump=5
 set scrolloff=10
 set regexpengine=1 " use old regexpengine to speed up scrolling
+set winwidth=84
+" We have to have a winheight bigger than we want to set winminheight. But if
+" we set winheight to be huge before winminheight, the winminheight set will
+" fail.
+set winheight=5
+set winminheight=5
+set winheight=999
+" This makes RVM work inside Vim. I have no idea why.
+set shell=bash
+" Prevent Vim from clobbering the scrollback buffer. See
+" http://www.shallowsky.com/linux/noaltscreen.html
+" set t_ti= t_te=
+" use emacs-style tab completion when selecting files, etc
+set wildmode=longest,list
+" make tab completion for files/buffers act like bash
+set wildmenu
 
 " use clipboard without pbcopy
 set clipboard=unnamed,unnamedplus
@@ -120,10 +149,13 @@ colorscheme solarized
 set cursorline
 hi CursorLine cterm=underline ctermbg=bg
 
-" powerline
-" set rtp+=/Library/Python/2.7/site-packages/powerline/bindings/vim/
-" always show status line
 set laststatus=2
+
+"----------------------------------------------
+" vim-airline
+"----------------------------------------------
+let g:airline_powerline_fonts=1
+let g:airline_solarized_bg='dark'
 
 "----------------------------------------------
 " MAPPINGS
@@ -178,6 +210,10 @@ nnoremap <leader>q :q<cr>
 nnoremap <leader>Q :q<cr>
 vnoremap <leader>q :q<cr>
 vnoremap <leader>Q :q<cr>
+nnoremap <leader>qf :q!<cr>
+nnoremap <leader>QF :q!<cr>
+vnoremap <leader>qf :q!<cr>
+vnoremap <leader>QF :q!<cr>
 
 " map <leader>tt to tabnew + Enter
 nnoremap <leader>tt :tabnew <cr>
@@ -283,11 +319,11 @@ nnoremap <leader>fo :call Indent()<cr>
 " ctrlp
 "--------------------------------------------------------------
 let g:ctrlp_max_files = 2000
-let g:ctrlp_working_path_mode = 'a'
+let g:ctrlp_working_path_mode = 'pwd'
 let g:ctrlp_brief_prompt = 1
 let g:ctrlp_follow_symlinks = 1
 let g:ctrlp_custom_ignore = {
-			\ 'dir':  '\.git$\|_build$\|cover$\|deps$\|doc$\|ESData$\|assets',
+			\ 'dir':  '\.git$\|_build$\|cover$\|deps$\|doc$\|ESData$\|assets\|target',
 			\ 'file': '\.dump\|\.(exe|so|dll|ez)$'
 			\ }
 nnoremap <C-b> :CtrlPBuffer<cr> 
@@ -295,7 +331,8 @@ nnoremap <C-b> :CtrlPBuffer<cr>
 "--------------------------------------------------------------
 " ack
 "--------------------------------------------------------------
-map <leader>u :Ack <C-R><C-W> --ignore-dir vendor --ignore-dir coverage --ignore-dir log<CR><CR>
+" Search in project word under the cursor
+map <leader>u :Ack! <C-R><C-W> --ignore-file is:erl_crash.dump --ignore-dir deps --ignore-dir priv/static --ignore-dir cover --ignore-dir vendor --ignore-dir coverage --ignore-dir log<CR><CR>
 map <leader>U :ccl<CR>
 
 " map keys to scroll the error list
@@ -310,70 +347,69 @@ nnoremap <leader>ck :cprev<cr>
 nnoremap <leader>co :copen<cr>
 nnoremap <leader>cc :cclose<cr>
 
-"------------------------------------------------------------------------------
-" NeoComplete
-"------------------------------------------------------------------------------
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
+"---------------------------------------------
+" vim-test
+"---------------------------------------------
+" make test commands execute using dispatch.vim
+let test#strategy = "basic"
+" let test#vim#term_position = "botright"
 
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
+"---------------------------------------------
+" git
+"---------------------------------------------
+map <leader>gb :Gblame<cr>
+map <leader>gs :Git status<cr>
 
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
+" Insert a function documentation sceleton with <ctrl-i><ctrl-d>
+imap <c-d><c-d> @doc """<cr>"""<esc>O
+imap <c-d><c-m> @moduledoc """<cr>"""<esc>O
+imap <c-d><c-e> <cr>## Example<cr><cr>    iex><space>
+imap <c-d><c-s> @spec<space>
 
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+"---------------------------------------------
+" coc-nvim
+"---------------------------------------------
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-"inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <cr>: close popup and save indent.
-
-inoremap <silent> <cr> <C-r>=<SID>my_cr_function()<cr>
-function! s:my_cr_function()
-	return pumvisible() ? neocomplete#close_popup() : "\<cr>"
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplete#close_popup()
-inoremap <expr><C-e>  neocomplete#cancel_popup()
 
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
-
-" Enable omni completion.
-augroup omni_completion
-	au!
-
-	au FileType css setlocal omnifunc=csscomplete#CompleteCSS
-	au FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-	au FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-	au FileType python setlocal omnifunc=pythoncomplete#Complete
-	au FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-augroup END
-
-" Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-	let g:neocomplete#sources#omni#input_patterns = {}
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
 endif
-"let g:neocomplete#sources#omni#input_patterns.go = '[^.[:digit:] *\t]\.\w*'
-let g:neocomplete#sources#omni#input_patterns.elixir = '[^.[:digit:] *\t]\.'
-"let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
-"if !exists('g:neocomplete#force_omni_input_patterns')
-"  let g:neocomplete#force_omni_input_patterns = {}
-"endif
-"let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\.'
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" MULTIPURPOSE TAB KEY
+" Indent if we're at the beginning of a line. Else, do completion.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" function! InsertTabWrapper()
+"     let col = col('.') - 1
+"     if !col || getline('.')[col - 1] !~ '\k'
+"         return "\<tab>"
+"     else
+"         return "\<c-p>"
+"     endif
+" endfunction
+" inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+" inoremap <s-tab> <c-n>
+" map <c-n> :bnext<CR>
 
 "---------------------------------------------
 " elixir
@@ -391,10 +427,18 @@ augroup elixir
 	au FileType elixir nnoremap <leader>mf :MixFormat<cr>
 	au FileType elixir nnoremap <leader>md :MixFormatDiff<cr>
 	au FileType elixir nnoremap <Space> za
+	au FileType elixir nnoremap <leader>> a<space>=><space><esc>a
+	au FileType elixir inoremap <c-l> <space>=><space>
 
-	au FileType elixir nnoremap <leader>rt :call RunTestFile()<cr>
-	au FileType elixir nnoremap <leader>RT :call RunNearestTest()<cr>
-	au FileType elixir nnoremap <leader>ra :call RunTests('')<cr>
+	" au FileType elixir nnoremap <leader>rt :call RunTestFile()<cr>
+	" au FileType elixir nnoremap <leader>RT :call RunNearestTest()<cr>
+	" au FileType elixir nnoremap <leader>ra :call RunTests('')<cr>
+
+	" use vim-test to run tests
+	au FileType elixir nnoremap <leader>rt :TestFile<cr>
+	au FileType elixir nnoremap <leader>RT :TestNearest<cr>
+	au FileType elixir nnoremap <leader>ra :TestSuite<cr>
+
 augroup END
 
 "-------------------------------
@@ -551,3 +595,10 @@ function! RenameFile()
     endif
 endfunction
 map <leader>n :call RenameFile()<cr>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" OPEN FILES IN DIRECTORY OF CURRENT FILE
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
+map <leader>e :e %%
+" map <leader>v :view %%
