@@ -1,19 +1,25 @@
 alias ctags='/usr/local/Cellar/ctags/5.8_1/bin/ctags'
+alias cdex='cd /Users/svrdlans/projects/elixir/'
 alias cdfh='cd /Users/svrdlans/projects/elixir/fh_umbrella/'
 alias cdvo='cd /Users/svrdlans/projects/elixir/vof/'
-alias cdex='cd /Users/svrdlans/projects/elixir/extreme_system/'
+alias cdvk='cd /Users/svrdlans/projects/elixir/vof_k8s/'
+alias cdes='cd /Users/svrdlans/projects/elixir/extreme_system/'
+alias cdxs='cd /Users/svrdlans/projects/elixir/x3m_system/'
 alias cdgft='cd /Users/svrdlans/projects/elixir/gft/gft_backend/'
 alias cdbq='cd /Users/svrdlans/projects/big_query/'
 alias cdbe='cd /Users/svrdlans/projects/elixir/nfi/beskar/'
 alias cdal='cd /Users/svrdlans/projects/elixir/nfi/albus/'
+alias cdre='cd /Users/svrdlans/projects/elixir/nfi/relay/dev-tools/code'
 alias cdpy='cd /Users/svrdlans/projects/python/'
 alias cddo='cd /Users/svrdlans/projects/docker/'
+alias cdru='cd /Users/svrdlans/projects/rust/'
 alias extree="tree -I 'doc|deps|_build'"
 
 export PATH=$PATH:/usr/local/sbin
 export PATH=$PATH:$HOME/Library/Python/2.7/bin
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/10/bin
 export PATH=/usr/local/opt/libpq/bin:$PATH
+export PATH=$PATH:/usr/local/Cellar/node/15.10.0/bin
 
 export NODE_COOKIE=my_own_node_cookie
 
@@ -28,6 +34,10 @@ export ALBUS_RESERVING_EXPIRED_RETRY_COUNT=3
 export ALBUS_RESERVING_EXPIRED_RETRY_INTERVAL_MS=1000
 export ALBUS_BOOKING_LOADS_EXPIRED_IN_MIN=5
 export ALBUS_TIMERS_NOT_BOOKED_IN_MIN=5
+export ALBUS_CDS_EMAIL=srdjan.svrdlan@vibe.rs
+
+# NFI projects
+export LAUNCH_DARKLY_SDK_KEY=
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/svrdlans/install/google-cloud-sdk/path.bash.inc' ]; then . '/Users/svrdlans/install/google-cloud-sdk/path.bash.inc'; fi
@@ -54,6 +64,7 @@ fi
 
 # kerl
 export KERL_BUILD_DOCS=yes
+export KERL_CONFIGURE_OPTIONS="--without-javac --with-ssl=/usr/local/opt/openssl@1.1"
 function kerl_default() {
 	export KERL_BUILD_BACKEND=tarball
 }
@@ -114,8 +125,12 @@ function get_my_public_ip() {
 	dig +short myip.opendns.com @resolver1.opendns.com
 }
 
-# kubectl
+# kubectl ->
 function qdel() { kubectl delete pod "$@";}
+function qdelevicted {
+	kubectl get pod | grep Evicted | awk '{print $1;}' | xargs kubectl delete pod;
+}
+
 function qdesc() { kubectl describe pod "$@";}
 # function qallowip { gcloud compute firewall-rules update allow-burmaja-home --source-ranges "$@"/32; }
 function qallowip {
@@ -124,25 +139,25 @@ function qallowip {
 		echo "One parameter requred: IP address!"
 		return 1;
 	else
-		res=$(valid_ip $@)
+		res=$(valid_ip $1)
 		if [[ $res -eq 0 ]]; then
-			echo "Replacing allowed IP in GCP firewall with: $@"
+			echo "Replacing allowed IP in GCP firewall with: $1"
 			if [[ $(should_continue) = "yes" ]]; then
 				echo ""
-				gcloud compute firewall-rules update allow-burmaja-home --source-ranges $@/32;
+				gcloud compute firewall-rules update allow-burmaja-home --source-ranges $1/32;
 			else
 				echo ""
 				echo "User cancelled, exiting."
 			fi
 		else
-			echo "$@ is not a valid IP address"
+			echo "$1 is not a valid IP address"
 			return 1
 		fi
 	fi
 }
 function qallowmyip {
 	local myip=$(get_my_public_ip)
-	`qallowip $myip`
+	qallowip $myip
 }
 alias qctx='kubectl config current-context'
 alias qviewctx='kubectl config view'
@@ -164,17 +179,18 @@ function qsetctx() {
 function qdown() { kubectl scale rc/"$@" --replicas=0; }
 function qup() { kubectl scale rc/"$@" --replicas=1; }
 
-function qdepdown() { kubectl scale --replicas 0 deployment/"$@"; }
-function qdepup() { kubectl scale --replicas 1 deployment/"$@"; }
+function qdpdown() { kubectl scale --replicas 0 deployment/"$@"; }
+function qdpup() { kubectl scale --replicas 1 deployment/"$@"; }
 
 function qerc() { kubectl edit rc "$@"; }
 function qecm() { kubectl edit configmap "$@"; }
+function qedp() { kubectl edit deployment "$@"; }
 
 function qpodname(){
 	kubectl get pods |grep $1 |awk '{print $1}'
 }
 function qssh(){
-	kubectl exec -ti `qpodname $1` /bin/bash
+	kubectl exec -ti `qpodname $1` -- /bin/bash
 }
 
 function qpods() {
@@ -186,8 +202,29 @@ function qpods() {
 	fi
 }
 
+function qpodsw() {
+	if [ $# -eq 0 ]; then
+		kubectl get pod --watch
+	else
+		local ctx=`ctx_name $1`
+		kubectl get pod --context="$ctx" --watch
+	fi
+}
+
+function qpodsv() {
+	if [ $# -eq 0 ]; then
+		kubectl get pod -L version
+	elif [ $# -eq 1 ]; then
+		local ctx=`ctx_name $1`
+		kubectl get pod --context="$ctx" -L version
+	else
+		local ctx=`ctx_name $1`
+		kubectl get pod --context="$ctx" -L version $2
+	fi
+}
+
 function get_default_ctx() {
-	local valid_ctxs=(albus fh-dev fh-demo fh-prod gft-qa gft-prod minikube)
+	local valid_ctxs=(albus albus-prod fh-dev fh-demo fh-prod gft-qa gft-prod minikube)
 	result=`qctx`
 	local ctx=${result##*_}
 	if ! [[ $result != error:* && ${valid_ctxs[@]} =~ $ctx ]]; then
@@ -197,7 +234,7 @@ function get_default_ctx() {
 }
 
 function qlog() {
-	valid_ctxs=(albus fh-dev fh-demo fh-prod gft-qa gft-prod minikube)
+	valid_ctxs=(albus albus-prod fh-dev fh-demo fh-prod gft-qa gft-prod minikube)
 	if [ $# -eq 1 ]; then
 		ctx=`get_default_ctx`
 		echo "Current context set to '$ctx'"
@@ -261,7 +298,13 @@ function qlistns() {
 function qsetns() {
 	kubectl config set-context --current --namespace="$1"
 }
-#
+# <- kubectl
+
+## Kubetail ->
+function qt() {
+	kubetail $@
+}
+## <- Kubetail
 
 # rename tabs function
 tab() {
@@ -280,7 +323,7 @@ function grepex() {
 		location=$2
 	fi
 	echo "Searching for '$1' at '$location':"
-	grep -lr -F --exclude-dir=deps --exclude-dir=doc --exclude-dir=_build --include=*.ex --include=*.exs --include=*.eex -e "$1" $location
+	grep -lr -F --exclude-dir=deps --exclude-dir=doc --exclude-dir=_build --include=*.ex --include=*.exs --include=*.eex --include=*.leex --include=*.heex -e "$1" $location
 }
 #
 
@@ -356,4 +399,14 @@ curl \
     --data-urlencode 'app_id=kWiwwD5ZKZWirVPmaZDV' \
     --data-urlencode 'app_code=qaVLRO2xzuhXIQlaXlifbA'"
 
+## NFI specific ->
 
+# Vagrant
+## Run colonel
+alias colonel="docker exec -it colonel bash"
+##
+
+## <- NFI specific
+
+# Rust/Cargo
+source "$HOME/.cargo/env"
