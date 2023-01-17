@@ -1,3 +1,6 @@
+# Enable extended pattern matching in shell scripts
+shopt -s extglob
+
 alias ctags='/usr/local/Cellar/ctags/5.8_1/bin/ctags'
 alias cdex='cd /Users/svrdlans/projects/elixir/'
 alias cdfh='cd /Users/svrdlans/projects/elixir/fh_umbrella/'
@@ -7,13 +10,15 @@ alias cdes='cd /Users/svrdlans/projects/elixir/extreme_system/'
 alias cdxs='cd /Users/svrdlans/projects/elixir/x3m_system/'
 alias cdgft='cd /Users/svrdlans/projects/elixir/gft/gft_backend/'
 alias cdbq='cd /Users/svrdlans/projects/big_query/'
+alias cdnfi='cd /Users/svrdlans/projects/elixir/nfi/'
 alias cdbe='cd /Users/svrdlans/projects/elixir/nfi/beskar/'
+alias cdbc='cd /Users/svrdlans/projects/elixir/nfi/backchannel/'
 alias cdal='cd /Users/svrdlans/projects/elixir/nfi/albus/'
 alias cdre='cd /Users/svrdlans/projects/elixir/nfi/relay/dev-tools/code'
 alias cdpy='cd /Users/svrdlans/projects/python/'
 alias cddo='cd /Users/svrdlans/projects/docker/'
 alias cdru='cd /Users/svrdlans/projects/rust/'
-alias extree="tree -I 'doc|deps|_build'"
+alias extree="tree -a -I 'doc|deps|_build'"
 
 export PATH=$PATH:/usr/local/sbin
 export PATH=$PATH:$HOME/Library/Python/2.7/bin
@@ -25,8 +30,8 @@ export NODE_COOKIE=my_own_node_cookie
 
 export LOCAL_BUILD=true
 # Albus related configs
-export ALBUS_GOOGLE_CLIENT_ID=368867814379-tsqr4fdpob0thgack6jqk79a822bk7s7.apps.googleusercontent.com
-export ALBUS_GOOGLE_CLIENT_SECRET=XX1jF7gkXxXrKuWiE3tVjrMK
+export ALBUS_GOOGLE_CLIENT_ID=
+export ALBUS_GOOGLE_CLIENT_SECRET=
 export ALBUS_EMAIL_TO=srdjan.svrdlan@gmail.com
 export ALBUS_OFFERED_LOADS_REMINDER_IN_MIN=5
 export ALBUS_RESERVING_LOADS_EXPIRED_IN_MIN=5
@@ -37,7 +42,11 @@ export ALBUS_TIMERS_NOT_BOOKED_IN_MIN=5
 export ALBUS_CDS_EMAIL=srdjan.svrdlan@vibe.rs
 
 # NFI projects
+# get key from 1password ->
 export LAUNCH_DARKLY_SDK_KEY=
+
+# GCLOUD USE PLUGIN
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/svrdlans/install/google-cloud-sdk/path.bash.inc' ]; then . '/Users/svrdlans/install/google-cloud-sdk/path.bash.inc'; fi
@@ -306,6 +315,14 @@ function qt() {
 }
 ## <- Kubetail
 
+## Docker ->
+
+function dops() {
+	docker ps --format "{{.ID}} {{.Names}}"
+}
+
+## <- Docker
+
 # rename tabs function
 tab() {
 	echo -ne "\033]0;$*\007"
@@ -338,7 +355,7 @@ function grepml() {
 		location=$2
 	fi
 	echo "Searching for '$1' at '$location':"
-	grep -lr -F --include=*.yaml -e "$1" $location
+	grep -lr -F --include=*.yaml --include=*.yml -e "$1" $location
 }
 #
 
